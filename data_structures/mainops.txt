@@ -1,0 +1,9 @@
+1) Access to k-node
+2) Insert after or before k-node
+3) Deleting of k-node
+4) Union of 2 or more linear lists in one
+5) Dividing one linear list to two or more independent lists
+6) Copying of list
+7) Determination size of list
+8) Sort
+9) Search k-node by some key value
