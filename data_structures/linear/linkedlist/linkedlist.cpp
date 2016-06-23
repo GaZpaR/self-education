@@ -2,7 +2,7 @@
 
 template<typename contenttype>
 struct node{
-	node *linkprev, *linknext;
+	node *linknext;
 	contenttype content;
 };
 
@@ -16,7 +16,6 @@ public:
 	linkedlist(){
 		firstnode = new node<contenttype>;
 		nodescounter = 1;
-		firstnode->linkprev = firstnode;
 		firstnode->linknext = firstnode;
 		firstnode->content = NULL;
 		lastnode = firstnode;
@@ -24,17 +23,19 @@ public:
 	linkedlist(contenttype initval){
 		firstnode = new node<contenttype>;
 		nodescounter = 1;
-		firstnode->linkprev = firstnode;
 		firstnode->linknext = firstnode;
 		firstnode->content = initval;
 		lastnode = firstnode;
 	};
 
 	~linkedlist(){
-		node<contenttype> *pos = firstnode;
-		while(pos != lastnode){
-			pos = pos->linknext;
-			delete pos->linkprev;
+		node<contenttype> *pos[nodescounter];
+		pos[0] = firstnode;
+		for(uint i=1; i<nodescounter; i++){
+			pos[i] = pos[i-1]->linknext;
+		}
+		for(uint i=1; i<nodescounter; i++){
+			delete pos[i];
 		}
 	};
 
@@ -56,7 +57,6 @@ public:
 	void push(contenttype val){
 		node<contenttype> *tempnode = new node<contenttype>;
 		tempnode->content = val;
-		tempnode->linkprev = lastnode;
 		tempnode->linknext = tempnode;
 		lastnode->linknext = tempnode;
 		lastnode = tempnode;
@@ -72,11 +72,10 @@ public:
 			while(cnt--){
 				pos = pos->linknext;
 			}
-			pos->linknext->linkprev = tempnode;
 			node<contenttype> *tmp = pos->linknext;
 			pos->linknext = tempnode;
-			tempnode->linkprev = pos;
 			tempnode->linknext = tmp;
+			if(pos->linknext == lastnode) lastnode = tempnode;
 			nodescounter++;
 		}
 		else std::cout<<"There is no such place where we could insert this element"
@@ -90,13 +89,12 @@ public:
 			node<contenttype> *pos = firstnode, *prev, *next;
 			while(cnt--){
 				pos = pos->linknext;
+				if(cnt == 1) prev = pos;
 			}
 			retval = pos->content;
-			prev = pos->linkprev;
 			next = pos->linknext;
 			delete pos;
 			prev->linknext = next;
-			next->linkprev = prev;
 			nodescounter--;
 		}
 		else std::cout<<"We can't cut this elementbecause this element doesn't exist"
@@ -110,12 +108,11 @@ public:
 			node<contenttype> *pos = firstnode, *prev, *next;
 			while(cnt--){
 				pos = pos->linknext;
+				if(cnt == 1) prev = pos;
 			}
-			prev = pos->linkprev;
 			next = pos->linknext;
 			delete pos;
 			prev->linknext = next;
-			next->linkprev = prev;
 			nodescounter--;
 		}
 		else std::cout<<"We can't delete this element because this element doesn't exist"

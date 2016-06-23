@@ -161,7 +161,7 @@ public:
 		}
 	};
 	~linkedarray(){
-		delete arrptr;
+		//delete arrptr;
 	};
 
 	contenttype getelement(uint xpos, uint ypos){
@@ -220,7 +220,7 @@ int main()
 		}
 		std::cout<<std::endl;
 	}
-	
+
 	std::cout<<"Bye bye!"<<std::endl;
 	return 0;
 }
