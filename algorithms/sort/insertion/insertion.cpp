@@ -14,7 +14,8 @@ void comparisonexchange(Item &A, Item &B){
 	if( A < B) exchange(A, B);
 }
 //#define SORTTYPE1
-#define SORTTYPE2
+//#define SORTTYPE2
+#define SORTTYPE3
 template<class Item>
 void sort(Item array[], int n, int m){
 #ifdef SORTTYPE1
@@ -31,6 +32,19 @@ void sort(Item array[], int n, int m){
 			comparisonexchange(array[j-1], array[j]);
 			if(array[j-1] < array[j]) break;
 		}
+	}
+#endif
+
+#ifdef SORTTYPE3
+	for(int i = m; i > n; i--) comparisonexchange(array[i-1], array[i]);
+	for(int j=n+2; j<=m; j++){
+		int f = j;
+		Item v = array[j];
+		while(v < array[f-1]){
+			array[f] = array[f-1];
+			f--;
+		}
+		array[f] = v;
 	}
 #endif
 }
