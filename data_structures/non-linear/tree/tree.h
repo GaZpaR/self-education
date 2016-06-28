@@ -2,12 +2,109 @@
 #include <string.h>
 #include <vector>
 
+template<typename T>
+class Node{
+private:
+	T content;
+	Node<T> *parent;
+	std::vector<Node<T>*> children;
+public:
+
+	Node(){};
+	Node(Node<T> *par): parent(par){};
+	Node(Node<T> *par, T val): parent(par), content(val){};
+	~Node(){};
+
+	T getContent(){
+		return content;
+	};
+
+	void setContent(T val){
+		content = val;
+	};
+
+	uint getChildrenQ(){
+		return children.size();
+	};
+
+	Node<T> getParent(Node<T> node){
+		return node.parent;
+	};
+
+	void setParent(Node<T> pnode){
+		parent = &pnode;
+	};
+
+};
+
+template<typename T>
+class Tree{
+	Node<T> *root;
+public:
+	Tree(){
+		root = new Node<T>(root);
+	};
+	Tree(T val){
+		root = new Node<T>(root, val);
+	};
+
+	~Tree(){
+		delete root;
+	};
+
+	// Appending to the root
+	void appendNode(Node<T> *node){
+		root->children.push_back(node);
+	};
+
+	// Appending to the node
+	void appendNode(Node<T> node, Node<T> *child){
+		node.children.push_back(child);
+	};
+
+	void delNode(Node<T> *node){
+		Node<T> *tnode = node->getParent();
+
+		uint i=0;
+
+		while(i < tnode->children.size()){
+			if(tnode->children[i] == &node){
+				tnode->children.erase(tnode->children[i]);
+				break;
+			}
+			i++;
+		}
+	};
+
+	Node<T> cutNode(Node<T> *node){
+		Node<T> *tnode = node->getParent();
+		Node<T> retNode = NULL;
+
+		uint i=0;
+
+		while(i < tnode->children.size()){
+			if(tnode->children[i] == &node){
+				retNode = tnode->children[i];
+				tnode->children.erase(tnode->children[i]);
+				break;
+			}
+			i++;
+		}
+
+		return retNode;
+	};
+
+	Node<T> *getRoot(){
+		return root;
+	};
+};
+
 struct leaf{
    char *name;
    uint8_t *content;
    size_t cntnumber;
    leaf* parent;
-   std::vector< leaf > child;
+   std::vector< leaf > children;
 };
 
 class arbitarytree{
@@ -65,7 +162,7 @@ class arbitarytree{
     virtual leaf* getLeaf(char *filename);
 
     // Show subtree
-    virtual void viewSubTree(leaf *choiceleaf);
+    virtual void viewSubTree(leaf *choiseleaf);
 
     // Show tree
     virtual void viewTree(void);

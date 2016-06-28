@@ -19,7 +19,7 @@ void arbitarytree::appendLeaf(leaf *parent, leaf *newleaf)
 {
   nqnt++;
 
-  parent->child.push_back(*newleaf);
+  parent->children.push_back(*newleaf);
 
   newleaf->parent = parent;
   newleaf->cntnumber = nqnt;
@@ -86,11 +86,11 @@ void arbitarytree::delTree(void)
 leaf* arbitarytree::getLeaf(char *filename)
 {
   leaf *pleaf;
-  
+
   return pleaf;
 }
 
-void arbitarytree::viewSubTree(leaf *choiceleaf)
+void arbitarytree::viewSubTree(leaf *choiseleaf)
 {
 
 }
@@ -98,4 +98,21 @@ void arbitarytree::viewSubTree(leaf *choiceleaf)
 void arbitarytree::viewTree(void)
 {
   cout << "Root file's name is: " << root.name << endl;
+}
+
+int main()
+{
+
+	std::cout<<"Hello, suka!"<<std::endl;
+	std::string somestr("Sukaaaa!!!!!");
+	Tree<std::string> sometree(somestr);
+	Node<std::string> *somen = new Node<std::string>;
+	//("Blya!!!\n")
+	sometree.appendNode(somen);
+	std::string mes = sometree.getRoot()->getContent();
+	std::cout<<mes<<std::endl;
+	Node<std::string> *ptr = sometree.getRoot();
+	std::string mes1 = ptr->children[0]->getContent();
+	std::cout<<mes1;
+	return 0;
 }
