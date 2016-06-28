@@ -13,14 +13,26 @@ template<class Item>
 void comparisonexchange(Item &A, Item &B){
 	if( A < B) exchange(A, B);
 }
-
+//#define SORTTYPE1
+#define SORTTYPE2
 template<class Item>
 void sort(Item array[], int n, int m){
+#ifdef SORTTYPE1
 	for(int i = n+1; i <= m; i++){
 		for(int j=i; j>=1; j--){
 			comparisonexchange(array[j-1], array[j]);
 		}
 	}
+#endif
+
+#ifdef SORTTYPE2
+	for(int i = n+1; i <= m; i++){
+		for(int j=i; j>=1; j--){
+			comparisonexchange(array[j-1], array[j]);
+			if(array[j-1] < array[j]) break;
+		}
+	}
+#endif
 }
 
 int main(int argc, char **argv)
