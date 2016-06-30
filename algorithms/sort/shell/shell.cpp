@@ -10,11 +10,6 @@ void exchange(Item &A, Item &B){
 }
 
 template<class Item>
-void comparisonexchange(Item &A, Item &B){
-	if( A < B) exchange(A, B);
-}
-
-template<class Item>
 void sort(Item array[], int n, int m){
 	int h;
 	for(h=n; h<=(m-n)/9; h=3*h+1);
