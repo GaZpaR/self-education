@@ -8,8 +8,10 @@ struct Node{
 
 int main(int argc, char **argv){
 	char *buffer = new char[256];
+
 	char str[] = "Hello my friend";
 	int val = sizeof(str);
+	
 	memcpy(buffer, &val, sizeof(int));
 	memcpy(&buffer[4], str, sizeof(str));
 
