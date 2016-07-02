@@ -76,6 +76,8 @@ int main(int argc, char **argv)
 
 	std::cout<<"Merged array is:"<<std::endl;
 	for(i=0; i < N + M; i++) std::cout<<c[i]<<" ";
+
+	delete a, b, c;
 	std::cout<<"\n Bye bye!!!\n";
 	return 0;
 }
