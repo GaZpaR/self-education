@@ -7,7 +7,7 @@ void merge(Item a[], int l, int m, int r){
 	if(r<1)return;
 
 	int i, j;
-	Item *const p = new Item[r+2];
+	Item *const p = new Item[r+1]; // Adding +1 element
 	for(i = m+1; i>l; i--) p[i-1] = a[i-1];
 	for(j = m; j<r; j++) p[r+m-j] = a[j+1];
 	for(int k = l; k <= r; k++)
