@@ -63,6 +63,6 @@ int main()
 		std::cout << q.pop() << " ";
 	}
 	std::cout<<std::endl;
-	std::cout<<"Fuck you!"<<std::endl;
+	std::cout<<"Uf!"<<std::endl;
 	return 0;
 }
