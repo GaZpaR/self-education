@@ -7,19 +7,19 @@ class pqueue
 {
 private:
 	T *queue_;
-	uint N;
+	int N;
 public:
 	pqueue(){
 		queue_ = new T[DEFAULT_QUEUE_SIZE];
 		N = DEFAULT_QUEUE_SIZE;
 	}
-	pqueue(uint size){
+	pqueue(int size){
 		if(size > 0)	queue_ = new T[size];
 		else	std::cout << "Queue have 0 size" <<std:: endl;
 		N = size;
 	}
 	~pqueue(){
-		delete queue_;
+		//delete queue_;
 	}
 
 	int empty() const{
@@ -35,16 +35,24 @@ public:
 		for(int i=0; i<N; i++)
 			if(queue_[max] < queue_[i]) max = i;
 		T el = queue_[max];
-		queue_[max] = queue_[N-1];
-		queue_[N-1] = el;
-		return queue_[N--];
+		if(N>0){
+			queue_[max] = queue_[N-1];
+			queue_[N-1] = el;
+			return queue_[N--];
+		}
+		else return (T)NULL;
 	};
 };
 
 int main()
 {
-	pqueue<uint> q(20);
-	
+	pqueue<int> q(20);
+	for(int i=0; i<20; i++)
+		q.insert(600*(1.0*rand()/RAND_MAX));
+	for(int i=0; i<20; i++)
+		std::cout<<q.getmax()<<" ";
+	std::cout<<std::endl;
+
 	std::cout<<"Bye bye!"<<std::endl;
 	return 0;
 }
