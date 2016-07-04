@@ -7,11 +7,12 @@ class Node{
 private:
 	T content;
 	Node<T> *parent;
-	std::vector<Node<T>*> children;
+	std::vector<Node<T> *> children;
 public:
 
 	Node(){};
 	Node(Node<T> *par): parent(par){};
+	Node(T val): content(val){};
 	Node(Node<T> *par, T val): parent(par), content(val){};
 	~Node(){};
 
@@ -27,11 +28,38 @@ public:
 		return children.size();
 	};
 
+	Node<T> *getChild(int i){
+		int cq = children.size();
+		return (cq > 0 && i <= cq)? children.at(i) : (Node<T> *)NULL;
+	};
+
+	void addChild(Node<T> *pC){
+		children.push_back(pC);
+	}
+
+	Node<T> cutChild(Node<T> *p){
+		Node<T> *c = p;
+		for (int i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+				 children.erase(children.at(i));
+			};
+		}
+		return c;
+	}
+
+	void delChild(Node<T> *p){
+		for (int i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+				 children.erase(children.at(i));
+			};
+		}
+	}
+
 	Node<T> getParent(Node<T> node){
 		return node.parent;
 	};
 
-	void setParent(Node<T> pnode){
+	void changeParent(Node<T> pnode){
 		parent = &pnode;
 	};
 
@@ -54,12 +82,16 @@ public:
 
 	// Appending to the root
 	void appendNode(Node<T> *node){
-		root->children.push_back(node);
+		root->addChild(node);
 	};
 
 	// Appending to the node
-	void appendNode(Node<T> node, Node<T> *child){
-		node.children.push_back(child);
+	void appendNode(Node<T> &node, Node<T> *child){
+		node.addChild(child);
+	};
+
+	void appendNode(Node<T> *node, Node<T> *child){
+		node->addChild(child);
 	};
 
 	void delNode(Node<T> *node){
@@ -97,74 +129,18 @@ public:
 	Node<T> *getRoot(){
 		return root;
 	};
-};
 
-struct leaf{
-   char *name;
-   uint8_t *content;
-   size_t cntnumber;
-   leaf* parent;
-   std::vector< leaf > children;
-};
+	T visit(Node<T> *pN){
+		T c = pN->getContent();
+		return c;
+	}
 
-class arbitarytree{
-  private:
-
-    // List with all links of tree
-    std::vector<leaf*> links;
-
-    // Nodes quantity
-    size_t nqnt;
-
-    leaf root;
-    // Create arbitary leaf
-    virtual leaf* createLeaf(char *leafname, uint8_t *file, size_t size);
-
-    // Append arbitary leaf to the parent
-    virtual void appendLeaf(leaf *parent, leaf *newleaf);
-
-    // Searching parentleaf
-    virtual leaf* searchLeaf(char *leafname);
-
-    // Deleting root and all subtrees
-    virtual void delTree(void);
-
-  public:
-    arbitarytree(char *rootfile, uint8_t *file, size_t size){
-      root.name = new char(strlen(rootfile)+1);
-      memcpy(root.name, rootfile, strlen(rootfile));
-
-      nqnt = 0;
-
-      root.cntnumber = nqnt;
-
-      root.parent = &root;
-
-      root.content = new uint8_t[size+1];
-      memcpy(root.content, file, size);
-
-      links.push_back(&root);
-    }
-
-    virtual ~arbitarytree(){
-      //delTree();
-    }
-
-    // Adding new leaf to the root
-    virtual void addLeaf(char *leafname, uint8_t *file, size_t size);
-    // Adding new leaf to the parent leaf
-    virtual void addLeaf(char *parentleaf, char *leafname, uint8_t *file, size_t size);
-
-    // Deleting leaf and it's children
-    virtual void delLeaf(leaf *choiceleaf);
-
-    // Geting leaf by it's name
-    virtual leaf* getLeaf(char *filename);
-
-    // Show subtree
-    virtual void viewSubTree(leaf *choiseleaf);
-
-    // Show tree
-    virtual void viewTree(void);
-
+	void traverseTree(Node<T> *pN, void (*F)(Node<T>*)){
+		F(pN);
+		int cq = pN->getChildrenQ();
+		// Job with content
+		for(int i=0; i<cq; i++){
+			traverseTree(pN->getChild(i), F);
+		}
+	};
 };
