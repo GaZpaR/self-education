@@ -72,6 +72,51 @@ void simplesort(T a[], int l, int r){
 	for(k=r; k>=l; k--) a[k] = pq.getmax();
 }
 
+template<class T>
+void heapsort1(T a[], int l, int r){
+	int k, N=r-l+1;
+	T *pq=a+l-1;
+	for(k=N/2; k>=1; k--)
+		fixDown(pq, k, N);
+	while(N>1){
+		exchange(pq[1], pq[N]);
+		fixDown(pq, 1, --N);
+	}
+}
+
+template<class T> void SiftDown(T* const heap, int i, int const n)
+{
+	int nMax( i );
+
+	T const value( heap[i] );
+
+	while ( true )
+	{
+		int childN( i*2+1 );
+		if ( ( childN < n ) && ( heap[childN] > value      ) )
+		  nMax = childN;
+
+		++childN;
+		if ( ( childN < n ) && ( heap[childN] > heap[nMax] ) )
+		  nMax = childN;
+		if ( nMax == i ) break;
+		heap[i] = heap[nMax]; heap[nMax] = value;
+		i = nMax;
+
+	};
+}
+
+template<class T>
+void heapsort(T* const heap, int n)
+{
+	for(int i(n/2-1); i>=0; --i) SiftDown(heap, i, n);
+		while( n > 1 )
+		{
+			--n;
+			exchange(heap[0], heap[n]);
+			SiftDown(heap, 0, n);
+		}
+}
 int main(int argc, char *argv[])
 {
 	if(argc < 1) return -1;
@@ -86,7 +131,8 @@ int main(int argc, char *argv[])
 	std::cout<<std::endl;
 
 
-	simplesort(a, 0, N);
+	heapsort(a, N);
+	//heapsort1(a, 0, N-1);
 
 	std::cout<<"Sorted array with heap-ordered tree is:"<<std::endl;
 	for(i=0; i < N; i++) std::cout<<a[i]<<" ";
