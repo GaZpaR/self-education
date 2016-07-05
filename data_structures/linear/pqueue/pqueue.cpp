@@ -15,6 +15,22 @@ void fixUp(T a[], int k){
 }
 
 template<class T>
+void fixDown(T a[], int k, int N){
+	while(2*k <= N){
+		int j=2*k;
+		if(j<N && a[j] < a[j+1]) j++;
+		if(!a[k] < a[j]) break;
+
+		T t;
+		a[k] = t;
+		a[k] = a[j];
+		a[j] = t;
+
+		k = j;
+	}
+}
+
+template<class T>
 class pqueue
 {
 private:
