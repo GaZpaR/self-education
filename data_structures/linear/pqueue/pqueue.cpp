@@ -56,19 +56,15 @@ public:
 
 	void insert(T item){
 		queue_[N++] = item;
+		fixUp(queue_, N);
 	}
 
 	T getmax(){
-		int max = 0;
-		for(int i=0; i<N; i++)
-			if(queue_[max] < queue_[i]) max = i;
-		T el = queue_[max];
-		if(N>0){
-			queue_[max] = queue_[N-1];
-			queue_[N-1] = el;
-			return queue_[N--];
-		}
-		else return (T)NULL;
+		T el = queue_[1];
+		queue_[1] = queue_[N];
+		queue_[N] = el;
+		fixDown(queue_, 1, N-1);
+		return queue_[N--];
 	};
 };
 
