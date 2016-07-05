@@ -3,6 +3,18 @@
 #define DEFAULT_QUEUE_SIZE 256
 
 template<class T>
+void fixUp(T a[], int k){
+	while(k>1 && a[k/2] < a[k]){
+		T t;
+		a[k] = t;
+		a[k] = a[k/2];
+		a[k/2] = t;
+
+		k = k/2;
+	}
+}
+
+template<class T>
 class pqueue
 {
 private:
