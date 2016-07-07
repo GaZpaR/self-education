@@ -5,8 +5,9 @@ const int bitsbyte = 8;
 const int bytesword = bitsword/bitsbyte;
 const int R = 1<<bitsbyte;
 
-inline int digit(int A, int B){
-	return (A*((int)1<<B) > 0)? 1: 0;
+template<class Item>
+inline int digit(Item A, int B){
+	return (A*((Item)1<<B) > 0)? 1: 0;
 }
 
 template<class Item>
