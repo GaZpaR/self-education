@@ -31,11 +31,11 @@ void insertion(Item a[], int l, int r){
 	}
 }
 
-#define M 55
+#define M 32
 
 #define ch(A) digit(A, d)
 template<class Item>
-void msd3way(Item a[], int l, int r, int d){
+void way3(Item a[], int l, int r, int d){
 	int i, j, k, p, q, v;
 
 	if(r-l <= M){insertion(a, l, r); return;}
@@ -53,23 +53,23 @@ void msd3way(Item a[], int l, int r, int d){
 	}
 
 	if(p == q){
-		if(v != '\0') msd3way(a, l, r, d+1);
+		if(v != '\0') way3(a, l, r, d+1);
 		return;
 	}
 
 	if(ch(a[i]) < v) i++;
 	for(k=l; k <= p; k++, j--) exchange(a[k], a[j]);
 	for(k=r; k >= q; k--, i++ ) exchange(a[k], a[i]);
-	msd3way(a, l, r, d);
+	way3(a, l, r, d);
 	if((i == r) && (ch(a[i]) == v)) i++;
-	if(v != '\0') msd3way(a, j+1, i-1, d+1);
-	msd3way(a, i, r, d);
+	if(v != '\0') way3(a, j+1, i-1, d+1);
+	way3(a, i, r, d);
 
 }
 
 template<class Item>
 void sort(Item a[],  int l, int r){
-	msd3way<Item>(a, l, r, 0);
+	way3<Item>(a, l, r, 0);
 }
 
 int main(int argc, char **argv)
