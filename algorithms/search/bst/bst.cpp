@@ -11,9 +11,11 @@ private:
 			item = x; l = 0; r = 0;
 		}
 	};
+
 	typedef node *link;
 	link head;
 	T nullItem;
+
 	T searchR(link h, key v){
 		if(h == 0) return nullItem;
 		key t = h->item.key();
@@ -23,6 +25,7 @@ private:
 		else
 			return searchR(h->r, v);
 	}
+
 	void insertR(link& h, T x){
 		if(h == 0){
 			h = new node(x);
@@ -32,6 +35,14 @@ private:
 			insertR(h->l, x);
 		else
 			insertR(h->r, x);
+	}
+
+	void showR(link h, std::ostream& os){
+		if(h == 0) return;
+
+		showR(h->l, os);
+		h->item.show(os);
+		showR(h->r, os);
 	}
 public:
 	ST(int maxN){
@@ -44,6 +55,10 @@ public:
 
 	T search(key v){
 		return searchR(head, v);
+	}
+
+	void show(std::ostream& os){
+		showR(head, os);
 	}
 };
 
