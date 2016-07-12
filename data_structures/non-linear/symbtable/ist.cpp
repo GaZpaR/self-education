@@ -32,15 +32,65 @@ public:
 	}
 };
 
-template<class T, class K>
-class SymTab{
-	SymTab(int);
-	int count();
-	T search(K);
-	void insert(T);
-	void remove(T);
-	T select(int);
-	void show(std::ostream&);
+template<class T, class key>
+class ST{
+private:
+	struct node{
+		T item;
+		node *l, *r;
+		node(T x){
+			item = x; l = 0; r = 0;
+		}
+	};
+
+	typedef node *link;
+	link head;
+	T nullItem;
+
+	T searchR(link h, key v){
+		if(h == 0) return nullItem;
+		key t = h->item.key();
+		if(v == t) return h->item();
+		if(v<t)
+			return searchR(h->l, v);
+		else
+			return searchR(h->r, v);
+	}
+
+	void insertR(link& h, T x){
+		if(h == 0){
+			h = new node(x);
+			return;
+		}
+		if(x.key() < h->item.key())
+			insertR(h->l, x);
+		else
+			insertR(h->r, x);
+	}
+
+	void showR(link h, std::ostream& os){
+		if(h == 0) return;
+
+		showR(h->l, os);
+		h->item.show(os);
+		showR(h->r, os);
+	}
+public:
+	ST(int maxN){
+		head = 0;
+	};
+
+	void insert(T x){
+		insertR(head, x);
+	}
+
+	T search(key v){
+		return searchR(head, v);
+	}
+
+	void show(std::ostream& os){
+		showR(head, os);
+	}
 };
 
 
