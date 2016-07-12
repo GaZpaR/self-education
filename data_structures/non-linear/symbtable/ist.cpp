@@ -119,6 +119,16 @@ private:
 			delete t;
 		}
 	}
+
+	link joinR(link a, link b){
+		if(b == 0) return a;
+		if(a == 0) return b;
+		insertT(b, a->item);
+		b->l = joinR(a->l, b->l);
+		b->r = joinR(a->r, b->r);
+		delete a;
+		return b;
+	}
 public:
 	ST(int maxN){
 		head = 0;
@@ -156,7 +166,9 @@ public:
 		}
 	}
 
-
+	void join(ST<T, key>& b){
+		head = joinR(head, b.head);
+	}
 };
 
 
