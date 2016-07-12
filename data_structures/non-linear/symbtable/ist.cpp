@@ -100,6 +100,25 @@ private:
 		if(t<k) return selectR(h->r, k-t-1);
 		return h->item;
 	};
+
+	link joinLR(link a, link b){
+		if(b == 0) return a;
+		partR(b, 0);
+		b->l = a;
+		return b;
+	}
+
+	void removeR(link& h, key v){
+		if(h == 0) return;
+		key w = h->item.key();
+		if(v<w) removeR(h->l, v);
+		if(w<v) removeR(h->r, v);
+		if(v == w){
+			link t = h;
+			h = joinLR(h->l, h->r);
+			delete t;
+		}
+	}
 public:
 	ST(int maxN){
 		head = 0;
@@ -107,6 +126,10 @@ public:
 
 	void insert(T x){
 		insertR(head, x);
+	}
+
+	void remove(T x){
+		removeR(head, x.key());
 	}
 
 	T search(key v){
@@ -120,6 +143,20 @@ public:
 	T select(int k){
 		return selectR(head, k);
 	}
+
+	void partR(link& h, int k){
+		int t = (h->l == 0)? 0:h->l->N;
+		if(t>k){
+			partR(h->l, k);
+			rotRight(h);
+		}
+		if(t<k){
+			partR(h->r, k-t-1);
+			rotLeft(h);
+		}
+	}
+
+
 };
 
 
