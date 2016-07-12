@@ -57,15 +57,19 @@ private:
 			return searchR(h->r, v);
 	}
 
-	void insertR(link& h, T x){
+	void insertT(link& h, T x){
 		if(h == 0){
 			h = new node(x);
 			return;
 		}
-		if(x.key() < h->item.key())
+		if(x.key() < h->item.key()){
 			insertR(h->l, x);
-		else
+			rotRight(h);
+		}
+		else{
 			insertR(h->r, x);
+			rotLeft(h);
+		}
 	}
 
 	void showR(link h, std::ostream& os){
@@ -75,6 +79,19 @@ private:
 		h->item.show(os);
 		showR(h->r, os);
 	}
+
+	void rotRight(link& h){
+		link x = h->l;
+		h->l = x->r;
+		x->r = h;
+		h = x;
+	};
+	void rotLeft(link& h){
+		link x = h->r;
+		h->r = x->l;
+		x->l = h;
+		h = x;
+	};
 public:
 	ST(int maxN){
 		head = 0;
