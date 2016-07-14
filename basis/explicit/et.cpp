@@ -42,7 +42,7 @@ void DoBar1 (Foo1 foo)
 
 int main()
 {
-	DoBar(41);
-	DoBar1(33);
+	DoBar(41); // Here will be implicit argument construction of Foo class
+	DoBar1(33); // This implicit argument construction of Foo1 class will cause compile error
 	return 0;
 }
