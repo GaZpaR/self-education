@@ -40,6 +40,7 @@ std::vector<Edge> edges(Graph &G){
 	}
 	return a;
 }
+
 template<class Graph>
 class IO{
 public:
@@ -61,6 +62,16 @@ void IO<Graph>::show(const Graph &G){
 		std::cout<<std::endl;
 	}
 }
+
+template<class Graph>
+class CC{
+private:
+	//
+public:
+	CC(const Graph &);
+	int count();
+	bool connect(int, int);
+};
 
 int main()
 {
