@@ -75,6 +75,14 @@ public:
 
 int main()
 {
+	std::cout<< "Example of usage GRAPH, CC and other abstract classes" <<std::endl;
+
+	int V = 45;
+	GRAPH G(V);
+	IO<GRAPH>::scan(G);
+	std::cout<<G.E()<<" ребер ";
+	CC<GRAPH> Gcc(G);
+	std::cout<< Gcc.count()<<" компонентов" <<std::endl;
 
 	std::cout<< "Bye bye!" <<std::endl;
 	return 0;
