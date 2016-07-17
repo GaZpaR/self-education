@@ -1,9 +1,11 @@
 CC	:= g++
 CF	:= -Wextra -std=c++14
 
-all: graph.cpp
+simple: graph.cpp
 	$(CC) $(CF) -o gh graph.cpp
 
+dense: dense.cpp
+	$(CC) $(CF) -o de dense.cpp
 clear:
 	rm -f *.o
-	rm -f gh
+	rm -f gh de
