@@ -1,5 +1,5 @@
 #include <iostream>
-#include <map>    //подключили библиотеку для работы с map
+#include <map>    // Lib to work with map
 using namespace std;
 
 int main()
