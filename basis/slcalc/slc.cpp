@@ -15,6 +15,17 @@ enum{
 	LP	// Least priority
 };
 
+// Function to check input expression
+bool expcheck(std::string exp){
+	for(uint i=0; i<exp.length(); i++){
+		char c = exp[i];
+		if(c < '(' || c > '9' || c == '\'') return false;	
+	}
+	return true;
+}
+
+
+// Template function to evaluate atomic function
 template<class T>
 T eval(int a, int b, const char op){
 	switch(op){
