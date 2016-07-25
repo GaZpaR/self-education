@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+
 #include <cstdlib>
 
 enum{
@@ -19,7 +21,9 @@ enum{
 bool expcheck(std::string exp){
 	for(uint i=0; i<exp.length(); i++){
 		char c = exp[i];
-		if(c < '(' || c > '9' || c == '\'') return false;	
+		if(c < '(' || c > '9' || c == '\''){
+			if(c != ' ') return false;
+		}	
 	}
 	return true;
 }
@@ -47,7 +51,16 @@ T eval(int a, int b, const char op){
 };
 
 
-std::string evals(std::string exp, int opq){
+std::string evals(std::string exp){
+	
+	// We should divide expression to the blocks if there are any brackets
+	std::vector<int> openbrpos, closebrpos;
+	for(uint i=0; i<exp.length(); i++){
+		char c = exp[i];
+		if(c == '(') openbrpos.push_back(i);
+		if(c == ')') closebrpos.push_back(i);
+	}
+	
 	uint i = 0, j = exp.length();
 	char c = ' ';
 	for(i; i < j; i++){
@@ -63,8 +76,11 @@ std::string evals(std::string exp, int opq){
 			try{
 				int sign = 1;
 
-				if(opq > 1 && c == '-') sign = -1;
-				int rexp = eval<int>(std::stoi(evals(texp1, opq--), nullptr, 0)*sign, std::stoi(evals(texp2, opq--), nullptr, 0)*sign, c);
+				if(c == '-'){
+					sign = -1;
+					c = '+';
+				}	
+				int rexp = eval<int>(std::stoi(evals(texp1), nullptr, 0), std::stoi(evals(texp2), nullptr, 0)*sign, c);
 				std::string res = std::to_string(rexp);
 				return res;
 			}
@@ -78,12 +94,14 @@ std::string evals(std::string exp, int opq){
 }
 
 int main(int argc, char **argv){
+
 	std::string evalexp(argv[1]);
-	int opq = 0;
+	// Check input expression for unhandling symbols
+	if(!expcheck(evalexp)) return -1;
+
 	std::cout << "Evaluating expression is: \"" << evalexp << "\"" << std::endl;
 
-	for(uint i=0 ; i < evalexp.length()-1; i++){
-		if(evalexp[i] == '+' || evalexp[i] == '-' || evalexp[i] == '*' || evalexp[i] == '/') opq++;
+	for(uint i=0 ; i < evalexp.length(); i++){
 		if(evalexp[i] == ' '){
 			evalexp.erase(evalexp.begin() + i);
 			if(i > 0) i--;
@@ -92,7 +110,7 @@ int main(int argc, char **argv){
 	
 	std::cout << "Evaluating expression without 'space' is: \"" << evalexp << "\"" << std::endl;
 	
-	std::cout << "Result is: " << evals(evalexp, opq) << std::endl;
+	std::cout << "Result is: " << evals(evalexp) << std::endl;
 	std::cout<<"Hello, suk!"<<std::endl;
 	return 0;
 }
