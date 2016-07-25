@@ -15,35 +15,28 @@ enum{
 	LP	// Least priority
 };
 
-int ieval(int a, int b, const char op){
-	int res;
+template<class T>
+T eval(int a, int b, const char op){
 	switch(op){
 		case '+':{
-			res =  a+b;
-			break;
+			return a+b;
 		}
 		case '-':{
-			res =  a-b;
-			break;
+			return a-b;
 		}
 		case '*':{
-			res = a*b;
-			break;
+			return a*b;
 		}
 		case '/':{
-			res = a/b;
-			break;
+			return a/b;
 		}
 		default: throw("atomeval:  Undefined math operation");
 
 	}
-	
-	std::cout << "a" << op << "b" << "="<< a << op << b << "=" << res << std::endl;
-	return res;
 };
 
 
-std::string eval(std::string exp){
+std::string evals(std::string exp, int opq){
 	uint i = 0, j = exp.length();
 	char c = ' ';
 	for(i; i < j; i++){
@@ -56,17 +49,17 @@ std::string eval(std::string exp){
 			std::string texp2;
 				texp2.assign(exp, i+1, j-1);
 			std::cout << texp2 << std::endl;
-			char buf[32];
-			int rexp;
 			try{
-				rexp = ieval(std::stoi(eval(texp1), nullptr, 0), std::stoi(eval(texp2), nullptr, 0), c);
-				snprintf(buf, sizeof(buf), "%d", rexp);
+				int sign = 1;
+
+				if(opq > 1 && c == '-') sign = -1;
+				int rexp = eval<int>(std::stoi(evals(texp1, opq--), nullptr, 0)*sign, std::stoi(evals(texp2, opq--), nullptr, 0)*sign, c);
+				std::string res = std::to_string(rexp);
+				return res;
 			}
 			catch(char const *er){
 				std::cout << er << std::endl;
 			}
-			std::string res(buf);
-			return res;
 		}
 	}
 	//std::cout << exp << std::endl;
@@ -75,10 +68,11 @@ std::string eval(std::string exp){
 
 int main(int argc, char **argv){
 	std::string evalexp(argv[1]);
-	
+	int opq = 0;
 	std::cout << "Evaluating expression is: \"" << evalexp << "\"" << std::endl;
 
 	for(uint i=0 ; i < evalexp.length()-1; i++){
+		if(evalexp[i] == '+' || evalexp[i] == '-' || evalexp[i] == '*' || evalexp[i] == '/') opq++;
 		if(evalexp[i] == ' '){
 			evalexp.erase(evalexp.begin() + i);
 			if(i > 0) i--;
@@ -87,7 +81,7 @@ int main(int argc, char **argv){
 	
 	std::cout << "Evaluating expression without 'space' is: \"" << evalexp << "\"" << std::endl;
 	
-	std::cout << "Result is: " << eval(evalexp) << std::endl;
+	std::cout << "Result is: " << evals(evalexp, opq) << std::endl;
 	std::cout<<"Hello, suk!"<<std::endl;
 	return 0;
 }
