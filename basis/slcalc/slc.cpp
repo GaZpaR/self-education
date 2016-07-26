@@ -99,6 +99,30 @@ std::string evalexpwb(std::string exp){
 		std::cout << ops[i] << ' ';
 	std::cout << std::endl;
 
+	// Calculator
+
+	std::vector<int> evalorder;
+	// Ordering
+	for(uint i=0; i < ops.size(); i++){
+		if(ops[i] == '*' || ops[i] == '/')
+			evalorder.push_back(i);
+	}
+
+	for(uint i=0; i < ops.size(); i++){
+		if(ops[i] == '-' || ops[i] == '+')
+			evalorder.push_back(i);
+	}
+
+	std::cout << "Evaluating order is: " << std::endl;
+	for(uint i=0; i<ops.size(); i++)
+		std::cout << evalorder[i] <<"="<< ops[evalorder[i]] << ' ';
+	std::cout << std::endl;
+
+	int rexp; // Result of evaluations
+	for(uint i=0; i<ops.size(); i++){
+
+	}
+	// rexp += eval<int>(args[i], args[i+], ops[i]);
 	return exp;
 }
 
@@ -120,7 +144,6 @@ std::string evals(std::string exp){
 	else{
 		std::cout << "There is no brackets" << std::endl;
 		return evalexpwb(exp);
-		// int rexp = eval<int>(std::stoi(evals(texp1), nullptr, 0), std::stoi(evals(texp2), nullptr, 0)*sign, c);
 	}
 }
 
