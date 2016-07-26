@@ -54,13 +54,22 @@ T eval(int a, int b, const char op){
 std::string evals(std::string exp){
 	
 	// We should divide expression to the blocks if there are any brackets
-	std::vector<int> openbrpos, closebrpos;
+	std::vector<int> obp, cbp; // obp- "open bracket position", cbp- "close bracket position" 
 	for(uint i=0; i<exp.length(); i++){
 		char c = exp[i];
-		if(c == '(') openbrpos.push_back(i);
-		if(c == ')') closebrpos.push_back(i);
+		if(c == '(') obp.push_back(i);
+		if(c == ')') cbp.push_back(i);
 	}
-	
+	if(obp.size() != cbp.size()) return (std::string)"Expression have uncoupled brackets";
+
+	if(obp.size() > 0 ){
+		
+		
+	}
+	else{
+		std::cout << "There is no brackets" << std::endl;
+	}
+
 	uint i = 0, j = exp.length();
 	char c = ' ';
 	for(i; i < j; i++){
