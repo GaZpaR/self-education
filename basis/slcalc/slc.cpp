@@ -151,8 +151,8 @@ std::string evalexpwb(std::string exp){
 		std::cout << "Size of args is: " << args.size() << std::endl;
 		*/
 
-		// Shift operations, because args[evalorder[i]] and args[evalorder[i]+1]
-		// became single argument after ops[evalorder[i]] operation
+		// Erasing ops and args, because args[evalorder[i]] and args[evalorder[i]+1]
+		// became single argument after completing ops[evalorder[i]] operation
 		if(evalorder[i] < args.size()){
 			args.erase(args.begin()+evalorder[i]+1);
 			ops.erase(ops.begin()+evalorder[i]);
@@ -169,7 +169,6 @@ std::string evalexpwb(std::string exp){
 	return std::to_string(args[0]);
 }
 
-
 std::string evals(std::string exp){
 
 	// We should divide expression to the blocks if there are any brackets
@@ -182,7 +181,12 @@ std::string evals(std::string exp){
 	if(obp.size() != cbp.size()) return (std::string)"error: Expression have uncoupled brackets";
 
 	if(obp.size() > 0 ){
-		std::cout << "There is no brackets" << std::endl;
+		std::cout << "There is expression with brackets" << std::endl;
+		/* TODO
+		Here will be recursive calling of evals() for each expression
+		which placed in brackets, for all couples of brackets.
+		For expression without brackets will be called evalexpwb().
+		*/
 		return exp;
 	}
 	else{
@@ -209,6 +213,6 @@ int main(int argc, char **argv){
 	std::cout << "Evaluating expression without 'space' is: \"" << evalexp << "\"" << std::endl;
 
 	std::cout << "Result is: " << evals(evalexp) << std::endl;
-	std::cout<<"Hello, suk!"<<std::endl;
+	std::cout<<"Bye bye!"<<std::endl;
 	return 0;
 }
