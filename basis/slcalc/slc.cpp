@@ -56,14 +56,20 @@ std::string evalexpwb(std::string exp){
 	std::vector<int> args;
 	std::vector<char> ops;
 
-	std::cout << exp << std::endl;
 	const uint explen = exp.length();
+
+	// Allocating arguments and operations without ordering
 	for(uint i=0, ps = 0; i<explen; i++){
+
+		if(i == explen-1){
+			std::string temps;
+			temps.assign(exp, ps, explen - ps);
+			args.push_back(std::stoi(temps));
+		}
+
 		if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
 			std::string temps1;
-
 			temps1.assign(exp, ps, i-ps);
-
 			args.push_back(std::stoi(temps1));
 
 			ops.push_back(exp[i]);
@@ -83,6 +89,7 @@ std::string evalexpwb(std::string exp){
 			args.push_back(std::stoi(temps2));
 			i++;
 			ps = i;
+
 			if(i == explen-1){
 				std::string temps3;
 				temps3.assign(exp, ps, explen - ps);
@@ -171,9 +178,10 @@ std::string evals(std::string exp){
 		if(c == '(') obp.push_back(i);
 		if(c == ')') cbp.push_back(i);
 	}
-	if(obp.size() != cbp.size()) return (std::string)"Expression have uncoupled brackets";
+	if(obp.size() != cbp.size()) return (std::string)"error: Expression have uncoupled brackets";
 
 	if(obp.size() > 0 ){
+		std::cout << "There is no brackets" << std::endl;
 		return exp;
 	}
 	else{
