@@ -61,6 +61,7 @@ std::string evalexpwb(std::string exp){
 	// Allocating arguments and operations without ordering
 	for(uint i=0, ps = 0; i<explen; i++){
 
+		// This check need for situation when we didn't allocate last argument
 		if(i == explen-1){
 			std::string temps;
 			temps.assign(exp, ps, explen - ps);
@@ -90,11 +91,11 @@ std::string evalexpwb(std::string exp){
 			i++;
 			ps = i;
 
-			if(i == explen-1){
+/*			if(i == explen-1){
 				std::string temps3;
 				temps3.assign(exp, ps, explen - ps);
 				args.push_back(std::stoi(temps3));
-			}
+			}*/
 		}
 	}
 /* This show args and operations
