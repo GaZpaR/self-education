@@ -60,35 +60,37 @@ std::string evalexpwb(std::string exp){
 	const uint explen = exp.length();
 	for(uint i=0, ps = 0; i<explen; i++){
 		if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
-
 			std::string temps1;
-				temps1.assign(exp, ps, i-ps);
+
+			temps1.assign(exp, ps, i-ps);
 
 			args.push_back(std::stoi(temps1));
 
 			ops.push_back(exp[i]);
 
 			std::string temps2;
-
+			ps = i+1;
+			for(i++; i<explen; i++){
+					if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/' ){
+						temps2.assign(exp, ps, i-ps);
+						ops.push_back(exp[i]);
+						break;
+					}
+					if(i == explen-1){
+						temps2.assign(exp, ps, explen - ps);
+					}
+			}
+			args.push_back(std::stoi(temps2));
 			i++;
 			ps = i;
-			for(; i<explen; i++){
-				if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/' ){
-					temps2.assign(exp, ps, i-ps);
-
-					ops.push_back(exp[i]);
-					break;
-				}
-				if(i == explen-1){
-					temps2.assign(exp, ps, i-explen-1);
-				}
+			if(i == explen-1){
+				std::string temps3;
+				temps3.assign(exp, ps, explen - ps);
+				args.push_back(std::stoi(temps3));
+			}
 		}
-			args.push_back(std::stoi(temps2));
-			ps = i+1;
-		}
-
 	}
-
+/* This show args and operations
 	std::cout << "Arguments are: " << std::endl;
 	for(uint i=0; i<args.size(); i++)
 		std::cout << args[i] << ' ';
@@ -98,32 +100,65 @@ std::string evalexpwb(std::string exp){
 	for(uint i=0; i<ops.size(); i++)
 		std::cout << ops[i] << ' ';
 	std::cout << std::endl;
+*/
 
 	// Calculator
 
-	std::vector<int> evalorder;
-	// Ordering
+	std::vector<uint> evalorder; // Order of operations
+	uint hp = 0, lp = 0;
+
+	// Ordering operations
+
+	// First of all we need operations with high priority
 	for(uint i=0; i < ops.size(); i++){
-		if(ops[i] == '*' || ops[i] == '/')
+		if(ops[i] == '*' || ops[i] == '/'){
 			evalorder.push_back(i);
+			hp++;
+		}
 	}
 
+	// Now we need to order low priority operations
 	for(uint i=0; i < ops.size(); i++){
-		if(ops[i] == '-' || ops[i] == '+')
+		if(ops[i] == '-' || ops[i] == '+'){
 			evalorder.push_back(i);
+			lp++;
+		}
 	}
 
+/* This show order of operations
 	std::cout << "Evaluating order is: " << std::endl;
 	for(uint i=0; i<ops.size(); i++)
 		std::cout << evalorder[i] <<"="<< ops[evalorder[i]] << ' ';
 	std::cout << std::endl;
+*/
 
-	int rexp; // Result of evaluations
-	for(uint i=0; i<ops.size(); i++){
+	// Evaluating epression by order
+	for(uint i=0; i < evalorder.size(); i++){
 
+		int rexp = eval<int>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
+
+		/* Debuging information
+		std::cout << "arg1=" << args[evalorder[i]] <<", arg2="<<args[evalorder[i]+1]<<
+			", operation="<<ops[evalorder[i]]<<", result="<<rexp<<std::endl;
+		std::cout << "Size of args is: " << args.size() << std::endl;
+		*/
+
+		// Shift operations, because args[evalorder[i]] and args[evalorder[i]+1]
+		// became single argument after ops[evalorder[i]] operation
+		if(evalorder[i] < args.size()){
+			args.erase(args.begin()+evalorder[i]+1);
+			ops.erase(ops.begin()+evalorder[i]);
+		}
+		// Recallculating order
+		for(uint j = i; j < evalorder.size(); j++){
+			if(evalorder[j] > evalorder[i]) evalorder[j]--;
+		}
+		// Storing result of eval<T>
+		args[evalorder[i]] = rexp;
 	}
-	// rexp += eval<int>(args[i], args[i+], ops[i]);
-	return exp;
+
+	std::cout << exp << '=' << args[0] << std::endl;
+	return std::to_string(args[0]);
 }
 
 
