@@ -35,8 +35,8 @@ set is
 set noequalalways
 " Высота окон по-умолчанию 20 строк
 set winheight=20
-" задать размер табуляции в два пробела
-set ts=2
+" задать размер табуляции в четыре пробела
+set ts=4
 " автоматически расставлять отступы
 set autoindent
 " Подсвечивать синтаксис
@@ -45,10 +45,10 @@ syntax on
 set number 
 set tabstop=2
 set fileencoding=utf-8
-set shiftwidth=2
+set shiftwidth=4
 set smartindent
 " Заменять табуляцию на пробелы
-set expandtab
+"set expandtab
 
 " Включаем bash-подобное дополнение командной строки
 set wildmode=longest:list,full
