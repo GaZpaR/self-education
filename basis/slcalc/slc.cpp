@@ -4,7 +4,7 @@
 
 #include <cstdlib>
 
-//#define DEBUG
+#define DEBUG
 
 enum{
 	SUM = '+',
@@ -66,7 +66,7 @@ std::string evalexpwb(std::string exp){
 		// This check need for situation when we didn't allocate last argument
 		if(i == explen-1){
 			std::string temps;
-			temps.assign(exp, ps, explen - ps);
+			temps.assign(exp, ps, explen - ps + 1);
 			args.push_back(std::stoi(temps));
 		}
 
@@ -90,9 +90,7 @@ std::string evalexpwb(std::string exp){
 					}
 			}
 			args.push_back(std::stoi(temps2));
-			i++;
-			ps = i;
-
+			ps = i+1;
 		}
 	}
 /* This show args and operations*/
@@ -142,6 +140,7 @@ std::string evalexpwb(std::string exp){
 	// Evaluating epression by order
 	for(uint i=0; i < evalorder.size(); i++){
     int rexp = (int)NULL;
+
     try{
     	rexp = eval<int>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
     }
@@ -158,7 +157,7 @@ std::string evalexpwb(std::string exp){
 
 		// Erasing ops and args, because args[evalorder[i]] and args[evalorder[i]+1]
 		// became single argument after completing ops[evalorder[i]] operation
-		if(evalorder[i] < args.size()){
+		if(evalorder[i] < args.size()-1){
 			args.erase(args.begin()+evalorder[i]+1);
 			ops.erase(ops.begin()+evalorder[i]);
 		}
