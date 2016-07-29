@@ -4,6 +4,8 @@
 
 #include <cstdlib>
 
+//#define DEBUG
+
 enum{
 	SUM = '+',
 	DIF = '-',
@@ -91,14 +93,10 @@ std::string evalexpwb(std::string exp){
 			i++;
 			ps = i;
 
-/*			if(i == explen-1){
-				std::string temps3;
-				temps3.assign(exp, ps, explen - ps);
-				args.push_back(std::stoi(temps3));
-			}*/
 		}
 	}
-/* This show args and operations
+/* This show args and operations*/
+#ifdef DEBUG
 	std::cout << "Arguments are: " << std::endl;
 	for(uint i=0; i<args.size(); i++)
 		std::cout << args[i] << ' ';
@@ -108,7 +106,7 @@ std::string evalexpwb(std::string exp){
 	for(uint i=0; i<ops.size(); i++)
 		std::cout << ops[i] << ' ';
 	std::cout << std::endl;
-*/
+#endif
 
 	// Calculator
 
@@ -133,23 +131,30 @@ std::string evalexpwb(std::string exp){
 		}
 	}
 
-/* This show order of operations
+/* This show order of operations*/
+#ifdef DEBUG
 	std::cout << "Evaluating order is: " << std::endl;
 	for(uint i=0; i<ops.size(); i++)
 		std::cout << evalorder[i] <<"="<< ops[evalorder[i]] << ' ';
 	std::cout << std::endl;
-*/
+#endif
 
 	// Evaluating epression by order
 	for(uint i=0; i < evalorder.size(); i++){
+    int rexp = (int)NULL;
+    try{
+    	rexp = eval<int>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
+    }
+    catch(char const *er){
+      std::cout << er << std::endl;
+    }
 
-		int rexp = eval<int>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
-
-		/* Debuging information
+		/* Debuging information */
+#ifdef DEBUG
 		std::cout << "arg1=" << args[evalorder[i]] <<", arg2="<<args[evalorder[i]+1]<<
 			", operation="<<ops[evalorder[i]]<<", result="<<rexp<<std::endl;
 		std::cout << "Size of args is: " << args.size() << std::endl;
-		*/
+#endif
 
 		// Erasing ops and args, because args[evalorder[i]] and args[evalorder[i]+1]
 		// became single argument after completing ops[evalorder[i]] operation
