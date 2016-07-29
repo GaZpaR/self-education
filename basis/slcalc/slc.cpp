@@ -4,7 +4,7 @@
 
 #include <cstdlib>
 
-#define DEBUG
+//#define DEBUG
 
 enum{
 	SUM = '+',
@@ -53,9 +53,10 @@ T eval(int a, int b, const char op){
 };
 
 // Function to evaluate expression without brackets
+template<class T>
 std::string evalexpwb(std::string exp){
 
-	std::vector<int> args;
+	std::vector<T> args;
 	std::vector<char> ops;
 
 	const uint explen = exp.length();
@@ -67,13 +68,13 @@ std::string evalexpwb(std::string exp){
 		if(i == explen-1){
 			std::string temps;
 			temps.assign(exp, ps, explen - ps + 1);
-			args.push_back(std::stoi(temps));
+			args.push_back((T) std::stod(temps));
 		}
 
 		if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
 			std::string temps1;
 			temps1.assign(exp, ps, i-ps);
-			args.push_back(std::stoi(temps1));
+			args.push_back((T) std::stod(temps1));
 
 			ops.push_back(exp[i]);
 
@@ -89,7 +90,7 @@ std::string evalexpwb(std::string exp){
 						temps2.assign(exp, ps, explen - ps);
 					}
 			}
-			args.push_back(std::stoi(temps2));
+			args.push_back((T)std::stod(temps2));
 			ps = i+1;
 		}
 	}
@@ -139,10 +140,10 @@ std::string evalexpwb(std::string exp){
 
 	// Evaluating epression by order
 	for(uint i=0; i < evalorder.size(); i++){
-    int rexp = (int)NULL;
+    T rexp = (T)NULL;
 
     try{
-    	rexp = eval<int>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
+    	rexp = eval<T>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
     }
     catch(char const *er){
       std::cout << er << std::endl;
@@ -173,6 +174,7 @@ std::string evalexpwb(std::string exp){
 	return std::to_string(args[0]);
 }
 
+template<class T>
 std::string evals(std::string exp){
 
 	// We should divide expression to the blocks if there are any brackets
@@ -195,7 +197,7 @@ std::string evals(std::string exp){
 	}
 	else{
 		std::cout << "There is no brackets" << std::endl;
-		return evalexpwb(exp);
+		return evalexpwb<T>(exp);
 	}
 }
 
@@ -216,7 +218,7 @@ int main(int argc, char **argv){
 
 	std::cout << "Evaluating expression without 'space' is: \"" << evalexp << "\"" << std::endl;
 
-	std::cout << "Result is: " << evals(evalexp) << std::endl;
+	std::cout << "Result is: " << evals<int>(evalexp) << std::endl;
 	std::cout<<"Bye bye!"<<std::endl;
 	return 0;
 }
