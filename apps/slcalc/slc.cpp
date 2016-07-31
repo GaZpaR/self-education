@@ -140,7 +140,7 @@ std::string evalexpwb(std::string exp){
 
 	// Evaluating epression by order
 	for(uint i=0; i < evalorder.size(); i++){
-    T rexp = (T)NULL;
+		T rexp = (T)NULL;
 
 		try{
 			rexp = eval<T>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
