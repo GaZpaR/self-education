@@ -142,12 +142,12 @@ std::string evalexpwb(std::string exp){
 	for(uint i=0; i < evalorder.size(); i++){
     T rexp = (T)NULL;
 
-    try{
-    	rexp = eval<T>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
-    }
-    catch(char const *er){
-      std::cout << er << std::endl;
-    }
+		try{
+			rexp = eval<T>(args[evalorder[i]], args[evalorder[i]+1], ops[evalorder[i]]);
+		}
+		catch(char const *er){
+				std::cout << er << std::endl;
+		}
 
 		/* Debuging information */
 #ifdef DEBUG
@@ -202,7 +202,6 @@ std::string evals(std::string exp){
 }
 
 int main(int argc, char **argv){
-
 	std::string evalexp(argv[1]);
 	// Check input expression for unhandling symbols
 	if(!expcheck(evalexp)) return -1;
