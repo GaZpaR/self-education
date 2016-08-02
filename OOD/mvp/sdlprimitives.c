@@ -171,7 +171,7 @@ void updateWindow(char *str, uint len)
 
 	for(uint j=0; j<1+sizeof(keyBoard)/sizeof(btn)/4; j++)
 		for(uint i=0; i<4; i++){
-			drawButton(keyBoard[4*j+i],i*20, 20*(j+1));
+			drawButton(keyBoard[4*j+i],i*(keyBoard[4*j+i].pos.w + 4), (keyBoard[4*j+i].pos.h + 4)*(j+1));
 		}
 
 	SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
