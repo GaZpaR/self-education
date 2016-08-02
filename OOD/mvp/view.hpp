@@ -1,5 +1,4 @@
 #include <iostream>
-#include "primsdl.h"
 
 class IView{
 public:
@@ -10,7 +9,6 @@ public:
 
 class View: public IView{
 public:
-	View(){
-		
-	};
+	View();
+	~View();
 };
