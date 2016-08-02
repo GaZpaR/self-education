@@ -2,4 +2,4 @@
 This repository is a collection of my educational development
 
 Root of this repo is consist of 5 directories: algorithms, apps, basis, data_structures and OOD.
-All directory names is description of it content.
+All directorie's names are descriptions of it content.
