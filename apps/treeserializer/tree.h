@@ -2,6 +2,12 @@
 #include <string.h>
 #include <vector>
 
+enum{
+	INT = 0,
+	FLOAT,
+	STR
+};
+
 class INode{
 public:
 	virtual ~INode();
@@ -10,24 +16,28 @@ public:
 	virtual uint getChildrenQ(INode *n);
 	virtual INode* getParent(INode *n);
 	virtual INode* getChild(uint i);
+	uint nodeType(){return type;};
+	
+	uint type;
 };
 
-class NodeInt: public INode{
+template<typename T>
+class NodeT: public INode{
 private:
-	int content;
-	NodeInt *parent;
-	std::vector<NodeInt *> children;
+	T content;
+	NodeT *parent;
+	std::vector<NodeT *> children;
 public:
-	NodeInt(){};
-	~NodeInt(){};
-	NodeInt(NodeInt *p): parent(p){};
-	NodeInt(NodeInt *p, int c): parent(p), content(c){};
+	NodeT(uint t){ type = t; };
+	~NodeT(){};
+	NodeT(uint t, NodeT *p): parent(p){ type = t; };
+	NodeT(uint t, NodeT *p, T c): parent(p), content(c){ type = t; };
 
-	int getContent(){
+	T getContent(){
 		return content;
 	};
 
-	void setContent(int c){
+	void setContent(T c){
 		content = c;
 	};
 
@@ -35,17 +45,17 @@ public:
 		return children.size();
 	};
 
-	NodeInt *getChild(uint i){
+	NodeT *getChild(uint i){
 		uint cq = children.size();
-		return (cq > 0 && i < cq)? children.at(i) : (NodeInt *)NULL;
+		return (cq > 0 && i < cq)? children.at(i) : (NodeT *)NULL;
 	};
 
-	void addChild(NodeInt *pC){
+	void addChild(NodeT *pC){
 		children.push_back(pC);
 	}
 
-	NodeInt *cutChild(NodeInt *p){
-		NodeInt *c = p;
+	NodeT *cutChild(NodeT *p){
+		NodeT *c = p;
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				 children.erase(children.begin()+i);
@@ -54,7 +64,7 @@ public:
 		return c;
 	};
 
-	void delChild(NodeInt *p){
+	void delChild(NodeT *p){
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				 children.erase(children.begin()+i);
@@ -62,11 +72,11 @@ public:
 		}
 	};
 
-	NodeInt* getParent(NodeInt node){
+	NodeT* getParent(NodeT node){
 		return node.parent;
 	};
 
-	void changeParent(NodeInt pnode){
+	void changeParent(NodeT pnode){
 		parent = &pnode;
 	};
 
