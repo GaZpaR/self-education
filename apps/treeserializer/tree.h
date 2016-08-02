@@ -21,17 +21,77 @@ public:
 	uint type;
 };
 
-template<typename T>
-class NodeT: public INode{
+class NodeInt: public INode{
 private:
+	typedef int T;
 	T content;
-	NodeT *parent;
-	std::vector<NodeT *> children;
+	NodeInt *parent;
+	std::vector<NodeInt *> children;
 public:
-	NodeT(uint t){ type = t; };
-	~NodeT(){};
-	NodeT(uint t, NodeT *p): parent(p){ type = t; };
-	NodeT(uint t, NodeT *p, T c): parent(p), content(c){ type = t; };
+	NodeInt(){ type = INT; };
+	~NodeInt(){};
+	NodeInt(NodeInt *p): parent(p){ type = INT; };
+	NodeInt(NodeInt *p, T c): parent(p), content(c){ type = INT; };
+
+	int getContent(){
+		return content;
+	};
+
+	void setContent(T c){
+		content = c;
+	};
+
+	uint getChildrenQ(){
+		return children.size();
+	};
+	
+	NodeInt *getChild(uint i){
+		uint cq = children.size();
+		return (cq > 0 && i < cq)? children.at(i) : (NodeInt *)NULL;
+	};
+		
+	void addChild(NodeInt *pC){
+		children.push_back(pC);
+	}
+			
+	NodeInt *cutChild(NodeInt *p){
+		NodeInt *c = p;
+		for (uint i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+				children.erase(children.begin()+i);
+			};
+		}
+		return c;
+	};
+				
+	void delChild(NodeInt *p){
+		for (uint i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+			 children.erase(children.begin()+i);
+			};
+		}
+	};
+					
+	NodeInt* getParent(NodeInt node){
+		return node.parent;
+	};
+
+	void changeParent(NodeInt pnode){
+		parent = &pnode;
+	};
+};
+
+class NodeFl: public INode{
+private:
+	typedef float T;
+	T content;
+	NodeFl *parent;
+	std::vector<NodeFl *> children;
+public:
+	NodeFl(){ type = FLOAT; };
+	~NodeFl(){};
+	NodeFl(NodeFl *p): parent(p){ type = FLOAT; };
+	NodeFl(NodeFl *p, T c): parent(p), content(c){ type = FLOAT; };
 
 	T getContent(){
 		return content;
@@ -44,43 +104,101 @@ public:
 	uint getChildrenQ(){
 		return children.size();
 	};
-
-	NodeT *getChild(uint i){
+	
+	NodeFl *getChild(uint i){
 		uint cq = children.size();
-		return (cq > 0 && i < cq)? children.at(i) : (NodeT *)NULL;
+		return (cq > 0 && i < cq)? children.at(i) : (NodeFl *)NULL;
 	};
-
-	void addChild(NodeT *pC){
+		
+	void addChild(NodeFl *pC){
 		children.push_back(pC);
 	}
-
-	NodeT *cutChild(NodeT *p){
-		NodeT *c = p;
+			
+	NodeFl *cutChild(NodeFl *p){
+		NodeFl *c = p;
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
-				 children.erase(children.begin()+i);
+				children.erase(children.begin()+i);
 			};
 		}
 		return c;
 	};
-
-	void delChild(NodeT *p){
+				
+	void delChild(NodeFl *p){
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
-				 children.erase(children.begin()+i);
+			 children.erase(children.begin()+i);
 			};
 		}
 	};
-
-	NodeT* getParent(NodeT node){
+					
+	NodeFl* getParent(NodeFl node){
 		return node.parent;
 	};
 
-	void changeParent(NodeT pnode){
+	void changeParent(NodeFl pnode){
 		parent = &pnode;
 	};
+};
 
+class NodeStr: public INode{
+private:
+	typedef std::string T;
+	T content;
+	NodeStr *parent;
+	std::vector<NodeStr *> children;
+public:
+	NodeStr(){ type = STR; };
+	~NodeStr(){};
+	NodeStr(NodeStr *p): parent(p){ type = STR; };
+	NodeStr(NodeStr *p, T c): parent(p), content(c){ type = STR; };
+
+	T getContent(){
+		return content;
+	};
+
+	void setContent(T c){
+		content = c;
+	};
+
+	uint getChildrenQ(){
+		return children.size();
+	};
 	
+	NodeStr *getChild(uint i){
+		uint cq = children.size();
+		return (cq > 0 && i < cq)? children.at(i) : (NodeStr *)NULL;
+	};
+		
+	void addChild(NodeStr *pC){
+		children.push_back(pC);
+	}
+			
+	NodeStr *cutChild(NodeStr *p){
+		NodeStr *c = p;
+		for (uint i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+				children.erase(children.begin()+i);
+			};
+		}
+		return c;
+	};
+				
+	void delChild(NodeStr *p){
+		for (uint i=0; i<children.size(); i++){
+			if(children.at(i) == p){
+				children.erase(children.begin()+i);
+			};
+		}
+	};
+					
+	NodeStr* getParent(NodeStr node){
+		return node.parent;
+	};
+
+	void changeParent(NodeStr pnode){
+		parent = &pnode;
+	};
 };
 
 template<typename T>
