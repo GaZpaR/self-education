@@ -275,7 +275,7 @@ public:
 
 	void* visit(INode *pN){	return pN->getContent();}
 
-	void traverseTree(INode *pN, void (*F)(auto*)){
+	void traverseTree(INode *pN, void (*F)(INode*)){
 		F(pN);
 		int cq = pN->getChildrenQ();
 		// Job with content
@@ -283,6 +283,5 @@ public:
 			traverseTree(pN->getChild(i), F);
 		}
 	};
-
 };
 
