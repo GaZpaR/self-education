@@ -272,26 +272,12 @@ public:
 	};
 
 };
-
+*/
 class TreeT{
 	INode *root;
 public:
-	TreeT(){
-		root = new NodeInt((NodeInt*)root, (int)NULL);
-	};
-
-	TreeT(int val){
-		root = new NodeInt((NodeInt*)root, val);
-	};
-
-
-	TreeT(float val){
-		root = new NodeFl((NodeFl*)root, val);
-	};
-
-
-	TreeT(std::string val){
-		root = new NodeStr((NodeStr*)root, val);
+	TreeT(INode *n){
+		root = n;
 	};
 
 	~TreeT(){
@@ -299,44 +285,44 @@ public:
 	};
 
 	// Appending to the root
-	void appendNode(INode *node){
-		root->addChild(node);
+	void appendNode(INode *n){
+		root->addChild(*n);
 	};
 
 	// Appending to the node
-	void appendNode(INode &node, INode *child){
-		node.addChild(child);
+	void appendNode(INode &n, INode *c){
+		n.addChild(*c);
 	};
 
-	void appendNode(INode *node, INode *child){
-		node->addChild(child);
+	void appendNode(INode *n, INode *c){
+		n->addChild(*c);
 	};
 
-	void delNode(INode* node){
-		INode *tnode = node->getParent();
+	void delNode(INode* n){
+		INode *tn = n->getParent();
 
 		uint i=0;
 
-		while(i < tnode->getChildrenQ()){
-			if(tnode->getChild(i) == &node){
-				tnode->delChild(tnode->getChild(i));
-				break;
+		while(i < tn->getChildrenQ()){
+			if(tn->getChild(i) == n){
+				tn->delChild(tn->getChild(i));
+				return;
 			}
 			i++;
 		}
+		std::cout << "We can't delete unexisted Node" << std::endl;
 	};
 
-	INode* cutNode(INode *node){
-		INode *tnode = node->getParent();
+	INode* cutNode(INode *n){
+		INode *tn = n->getParent();
 
 		uint i=0;
 
-		while(i < tnode->getChildrenQ()){
-			if(tnode->getChild(i) == &node){
-
-				INode *retNode = tnode->getChild(i);
-				tnode->delChild(tnode->getChild(i));
-				return retNode
+		while(i < tn->getChildrenQ()){
+			if(tn->getChild(i) == n){
+				INode *retNode = tn->getChild(i);
+				tn->delChild(tn->getChild(i));
+				return retNode;
 			}
 			i++;
 		}
@@ -344,13 +330,11 @@ public:
 		return (INode*)NULL;
 	};
 
-	INode *getRoot(){
-		return root;
-	};
+	INode *getRoot(){return root;};
 
-	void* visit(INode *pN){	return &pN->getContent();}
+	void* visit(INode *pN){	return pN->getContent();}
 
-	void traverseTree(auto *pN, void (*F)(auto*)){
+	void traverseTree(INode *pN, void (*F)(auto*)){
 		F(pN);
 		int cq = pN->getChildrenQ();
 		// Job with content
@@ -360,7 +344,7 @@ public:
 	};
 
 };
-
+/*
 template<typename T>
 class Tree{
 	Node<T> *root;
