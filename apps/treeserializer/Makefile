@@ -1,7 +1,7 @@
 CC              := g++
 PROJPATH				:= -I./
 LIBPATH         := -L/usr/include
-OPTS            := -Wextra -std=c++11
+OPTS            := -Wextra -std=c++14
 LIBRARIES       :=
 
 all: 
