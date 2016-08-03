@@ -150,7 +150,7 @@ public:
 		parent = &pnode;
 	};
 };
-/*
+
 class NodeStr: public INode{
 private:
 	typedef std::string T;
@@ -200,16 +200,16 @@ public:
 			};
 		}
 	};
-					
-	NodeStr* getParent(NodeStr node){
-		return node.parent;
-	};
 
-	void changeParent(NodeStr pnode){
+	NodeStr* getParent(){ return parent; }
+					
+	NodeStr* getParent(NodeStr &p){ return p.getParent();};
+
+	void changeParent(NodeStr &pnode){
 		parent = &pnode;
 	};
 };
-
+/*
 template<typename T>
 class Node{
 private:
