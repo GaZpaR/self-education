@@ -23,9 +23,9 @@ public:
 	// Funcs to operate with child Nodes
 	virtual uint getChildrenQ() = 0;
 	virtual INode* getChild(uint) = 0;
-	virtual INode *cutChild(INode*) = 0;
+	virtual INode* cutChild(INode*) = 0;
 	virtual void delChild(INode*) = 0;
-	virtual void addChild(INode&) = 0;
+	virtual void addChild(INode*) = 0;
 
 	// Get link to parent node
 	virtual INode* getParent() = 0;
@@ -39,14 +39,17 @@ class NodeInt: public INode{
 private:
 	typedef int T;
 	T content;
-	NodeInt *parent;
-	std::vector<NodeInt *> children;
+	INode *parent;
+	std::vector<INode *> children;
 	const uint type = INT;
 public:
 	NodeInt(){ };
 	~NodeInt(){};
-	NodeInt(NodeInt *p): parent(p){ };
-	NodeInt(NodeInt *p, T c): parent(p), content(c){ };
+	NodeInt(INode *p){ parent = p; };
+	NodeInt(INode *p, T c){
+		parent = p;
+		content = c;
+	};
 
 	uint nodeType(){ return type;};
 
@@ -59,15 +62,15 @@ public:
 
 	uint getChildrenQ(){ return children.size();};
 	
-	NodeInt *getChild(uint i){
+	INode *getChild(uint i){
 		uint cq = children.size();
-		return (cq > 0 && i < cq)? children.at(i) : (NodeInt *)NULL;
+		return (cq > 0 && i < cq)? children.at(i) : (INode *)NULL;
 	};
-		
-	void addChild(NodeInt *pC){	children.push_back(pC);	}
+	
+	void addChild(INode *pC){	children.push_back(pC);	}
 			
-	NodeInt *cutChild(NodeInt *p){
-		NodeInt *c = p;
+	INode *cutChild(INode *p){
+		INode *c = p;
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				children.erase(children.begin()+i);
@@ -76,18 +79,19 @@ public:
 		return c;
 	};
 				
-	void delChild(NodeInt *p){
+	void delChild(INode *p){
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 			 children.erase(children.begin()+i);
 			};
 		}
 	};
-	NodeInt* getParent(NodeInt &p){ return p.getParent(); };				
-	NodeInt* getParent(){ return parent; };
 
-	void changeParent(NodeInt &pnode){
-		parent = &pnode;
+	INode* getParent(INode &p){ return p.getParent(); };				
+	INode* getParent(){ return parent; };
+
+	void setParent(INode *p){
+		parent = p;
 	};
 };
 
@@ -95,14 +99,14 @@ class NodeFl: public INode{
 private:
 	typedef float T;
 	T content;
-	NodeFl *parent;
-	std::vector<NodeFl *> children;
+	INode *parent;
+	std::vector<INode *> children;
 	const uint type = FLOAT;
 public:
 	NodeFl(){};
 	~NodeFl(){};
-	NodeFl(NodeFl *p): parent(p){};
-	NodeFl(NodeFl *p, T c): parent(p), content(c){};
+	NodeFl(INode *p): parent(p){};
+	NodeFl(INode *p, T c): parent(p), content(c){};
 
 	uint nodeType(){ return type;};
 
@@ -117,15 +121,15 @@ public:
 
 	uint getChildrenQ(){return children.size();};
 	
-	NodeFl *getChild(uint i){
+	INode *getChild(uint i){
 		uint cq = children.size();
-		return (cq > 0 && i < cq)? children.at(i) : (NodeFl *)NULL;
+		return (cq > 0 && i < cq)? children.at(i) : (INode *)NULL;
 	};
 		
-	void addChild(NodeFl *pC){children.push_back(pC);}
+	void addChild(INode *pC){children.push_back(pC);}
 			
-	NodeFl *cutChild(NodeFl *p){
-		NodeFl *c = p;
+	INode *cutChild(INode *p){
+		INode *c = p;
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				children.erase(children.begin()+i);
@@ -134,7 +138,7 @@ public:
 		return c;
 	};
 				
-	void delChild(NodeFl *p){
+	void delChild(INode *p){
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 			 children.erase(children.begin()+i);
@@ -142,11 +146,11 @@ public:
 		}
 	};
 	
-	NodeFl* getParent(){ return parent; }
+	INode* getParent(){ return parent; }
 
-	NodeFl* getParent(NodeFl &p){ return p.getParent(); };
+	INode* getParent(INode &p){ return p.getParent(); };
 
-	void changeParent(NodeFl &pnode){
+	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
 };
@@ -155,14 +159,14 @@ class NodeStr: public INode{
 private:
 	typedef std::string T;
 	T content;
-	NodeStr *parent;
+	INode *parent;
 	const uint type = STR;
-	std::vector<NodeStr *> children;
+	std::vector<INode *> children;
 public:
 	NodeStr(){};
 	~NodeStr(){};
-	NodeStr(NodeStr *p): parent(p){};
-	NodeStr(NodeStr *p, T c): parent(p), content(c){};
+	NodeStr(INode *p): parent(p){};
+	NodeStr(INode *p, T c): parent(p), content(c){};
 
 	uint nodeType(){ return type;};
 
@@ -176,15 +180,15 @@ public:
 
 	uint getChildrenQ(){return children.size();};
 	
-	NodeStr *getChild(uint i){
+	INode *getChild(uint i){
 		uint cq = children.size();
 		return (cq > 0 && i < cq)? children.at(i) : (NodeStr *)NULL;
 	};
 		
-	void addChild(NodeStr *pC){	children.push_back(pC);}
+	void addChild(INode *pC){	children.push_back(pC);}
 			
-	NodeStr *cutChild(NodeStr *p){
-		NodeStr *c = p;
+	INode *cutChild(INode *p){
+		INode *c = p;
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				children.erase(children.begin()+i);
@@ -193,7 +197,7 @@ public:
 		return c;
 	};
 				
-	void delChild(NodeStr *p){
+	void delChild(INode *p){
 		for (uint i=0; i<children.size(); i++){
 			if(children.at(i) == p){
 				children.erase(children.begin()+i);
@@ -201,11 +205,11 @@ public:
 		}
 	};
 
-	NodeStr* getParent(){ return parent; }
+	INode* getParent(){ return parent; }
 					
-	NodeStr* getParent(NodeStr &p){ return p.getParent();};
+	INode* getParent(INode &p){ return p.getParent();};
 
-	void changeParent(NodeStr &pnode){
+	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
 };
@@ -286,16 +290,16 @@ public:
 
 	// Appending to the root
 	void appendNode(INode *n){
-		root->addChild(*n);
+		root->addChild(n);
 	};
 
 	// Appending to the node
 	void appendNode(INode &n, INode *c){
-		n.addChild(*c);
+		n.addChild(c);
 	};
 
 	void appendNode(INode *n, INode *c){
-		n->addChild(*c);
+		n->addChild(c);
 	};
 
 	void delNode(INode* n){
