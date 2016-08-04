@@ -55,6 +55,7 @@ private:
 public:
 	NodeInt(){ };
 	~NodeInt(){};
+	NodeInt(T c): content(c){};
 	NodeInt(INode *p){ parent = p; };
 	NodeInt(INode *p, T c){
 		parent = p;
@@ -126,6 +127,7 @@ private:
 public:
 	NodeFl(){};
 	~NodeFl(){};
+	NodeFl(T c): content(c){};
 	NodeFl(INode *p): parent(p){};
 	NodeFl(INode *p, T c): parent(p), content(c){};
 
@@ -197,6 +199,7 @@ private:
 public:
 	NodeStr(){};
 	~NodeStr(){};
+	NodeStr(T c): content(c){};
 	NodeStr(INode *p): parent(p){};
 	NodeStr(INode *p, T c): parent(p), content(c){};
 
