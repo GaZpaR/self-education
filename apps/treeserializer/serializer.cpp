@@ -1,7 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include "tree.h"
-
-
+#include "serializer.hpp"
 
 int main(int argc, char **argv){
 
@@ -29,19 +29,50 @@ int main(int argc, char **argv){
 
 	t.appendNode(new NodeInt(root, 128));
 	t.appendNode(new NodeStr(root, "Hello, drug!!"));
+	
+	std::vector<std::string> out;
 
 	t.traverseTree(root,// Lambda expression begins
-		[](INode *n) {
+		[](INode *n, std::vector<std::string> &o) {
 			NC cs = n->getCoordinates();
+
+
 			std::cout << "level=" << cs.lev << ", position=" << cs.pos << ": ";
+			std::string temps; 
+			
+			std::string fe('{' + std::to_string(cs.lev) + '.' + std::to_string(cs.pos)+ ':');
+
 			switch(n->nodeType()){
-				case INT: std::cout << *(int*)n->getContent() << std::endl; break;
-				case FLOAT: std::cout << *(float*)n->getContent() << std::endl; break;
-				case STR: std::cout << *(std::string*)n->getContent() << std::endl; break;
+				case INT:
+					fe += std::to_string(*(int*)n->getContent());
+					std::cout <<  *(int*)n->getContent() << std::endl;
+					break;
+				case FLOAT:
+					fe += std::to_string(*(float*)n->getContent());
+					std::cout << *(float*)n->getContent() << std::endl;
+					break;
+				case STR:
+					fe += (*(std::string*)n->getContent());
+					std::cout << *(std::string*)n->getContent() << std::endl; 
+					break;
 				default: std::cout << "Undefined Node content type" << std::endl; break;
 			}
+			fe += "}";
+			o.push_back(fe);
 		}// end of lambda expression
-	);
+	, out);
+
+	std::cout << "Output vector size is: " << out.size() << std::endl;
+	for(uint i=0; i<out.size(); i++)
+			std::cout<<out[i];
+	std::cout<<std::endl;
+	
+	std::ofstream file;
+	file.open("simpletree.txt");
+	for(uint i=0; i<out.size(); i++)
+		file<<out[i];
+	file.close();
+
 	std::cout << "Bye bye!" << std::endl;
 	return 0;
 }

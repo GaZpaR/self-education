@@ -327,12 +327,12 @@ public:
 
 	void* visit(INode *pN){	return pN->getContent();}
 
-	void traverseTree(INode *pN, void (*F)(INode*)){
-		F(pN);
+	void traverseTree(INode *pN, void (*F)(INode*, std::vector<std::string>&), std::vector<std::string> &v){
+		F(pN, v);
 		int cq = pN->getChildrenQ();
 		// Job with content
 		for(int i=0; i<cq; i++){
-			traverseTree(pN->getChild(i), F);
+			traverseTree(pN->getChild(i), F, v);
 		}
 	};
 };
