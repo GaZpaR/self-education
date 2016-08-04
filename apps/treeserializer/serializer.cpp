@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 
 	NodeStr s21(&s2, "ABC"), s22(&s2, "BAC"), s23(&s2, "CAB");
 
-	TreeT t(root);
+	Tree t(root);
 
 	t.appendNode(&s);
 	t.appendNode(s, &s1);
@@ -32,14 +32,16 @@ int main(int argc, char **argv){
 
 	t.traverseTree(root,// Lambda expression begins
 		[](INode *n) {
+			NC cs = n->getCoordinates();
+			std::cout << "level=" << cs.lev << ", position=" << cs.pos << ": ";
 			switch(n->nodeType()){
 				case INT: std::cout << *(int*)n->getContent() << std::endl; break;
 				case FLOAT: std::cout << *(float*)n->getContent() << std::endl; break;
 				case STR: std::cout << *(std::string*)n->getContent() << std::endl; break;
 				default: std::cout << "Undefined Node content type" << std::endl; break;
 			}
-		}	// end of lambda expression
-									);
+		}// end of lambda expression
+	);
 	std::cout << "Bye bye!" << std::endl;
 	return 0;
 }

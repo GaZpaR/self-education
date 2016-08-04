@@ -2,6 +2,11 @@
 #include <string.h>
 #include <vector>
 
+typedef struct Ncoordinates{
+	uint lev;
+	uint pos;
+}NC;
+
 enum{
 	INT = 0,
 	FLOAT,
@@ -33,6 +38,10 @@ public:
 
 	// Func to define type of node
 	virtual uint nodeType() = 0;
+
+	// Funcs to determining and geting Node's coordinates
+	virtual void setCoordinates(uint, uint) = 0;
+	virtual NC getCoordinates() = 0;
 };
 
 class NodeInt: public INode{
@@ -42,6 +51,7 @@ private:
 	INode *parent;
 	std::vector<INode *> children;
 	const uint type = INT;
+	NC coord;
 public:
 	NodeInt(){ };
 	~NodeInt(){};
@@ -93,6 +103,16 @@ public:
 	void setParent(INode *p){
 		parent = p;
 	};
+
+	void setCoordinates(uint l, uint p){
+		coord.lev = l;
+		coord.pos = p;
+	}
+
+	NC getCoordinates(){
+		return coord;
+	}
+
 };
 
 class NodeFl: public INode{
@@ -102,6 +122,7 @@ private:
 	INode *parent;
 	std::vector<INode *> children;
 	const uint type = FLOAT;
+	Ncoordinates coord;
 public:
 	NodeFl(){};
 	~NodeFl(){};
@@ -153,6 +174,16 @@ public:
 	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
+	
+	void setCoordinates(uint l, uint p){
+		coord.lev = l;
+		coord.pos = p;
+	}
+
+	NC getCoordinates(){
+		return coord;
+	}
+
 };
 
 class NodeStr: public INode{
@@ -162,6 +193,7 @@ private:
 	INode *parent;
 	const uint type = STR;
 	std::vector<INode *> children;
+	Ncoordinates coord;
 public:
 	NodeStr(){};
 	~NodeStr(){};
@@ -212,31 +244,43 @@ public:
 	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
+
+	void setCoordinates(uint l, uint p){
+		coord.lev = l;
+		coord.pos = p;
+	}
+
+	NC getCoordinates(){
+		return coord;
+	}
 };
 
-class TreeT{
+class Tree{
 	INode *root;
 public:
-	TreeT(INode *n){
+	Tree(INode *n){
 		root = n;
 	};
 
-	~TreeT(){
+	~Tree(){
 		delete root;
 	};
 
 	// Appending to the root
 	void appendNode(INode *n){
 		root->addChild(n);
+		n->setCoordinates(1, root->getChildrenQ());
 	};
 
 	// Appending to the node
 	void appendNode(INode &n, INode *c){
 		n.addChild(c);
+		c->setCoordinates(n.getCoordinates().lev + 1, n.getChildrenQ());
 	};
 
 	void appendNode(INode *n, INode *c){
 		n->addChild(c);
+		c->setCoordinates(n->getCoordinates().lev + 1, n->getChildrenQ());
 	};
 
 	void delNode(INode* n){
@@ -247,11 +291,17 @@ public:
 		while(i < tn->getChildrenQ()){
 			if(tn->getChild(i) == n){
 				tn->delChild(tn->getChild(i));
+				// Shift children positions
+				while(i < tn->getChildrenQ()){
+					INode *p = tn->getChild(i);
+					p->setCoordinates(p->getCoordinates().lev, p->getCoordinates().pos-1);
+					i++;
+				}
 				return;
 			}
 			i++;
 		}
-		std::cout << "We can't delete unexisted Node" << std::endl;
+		std::cout << "We can't delete unexist Node" << std::endl;
 	};
 
 	INode* cutNode(INode *n){
@@ -267,7 +317,9 @@ public:
 			}
 			i++;
 		}
-
+		// TODO
+		// Here should code to order elements of subtree
+		// which we get by cutNode() operation
 		return (INode*)NULL;
 	};
 
