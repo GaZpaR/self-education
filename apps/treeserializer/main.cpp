@@ -15,9 +15,8 @@ int main(int argc, char **argv){
 	}
 	
 	std::string input(argv[1]), output(argv[2]);
-	Tree t = deserializeTree(input);
-	serializeTree(t, output);
-
+//	Tree t = ;
+	serializeTree(deserializeTree(input), output);
 	return 0;
 }
 

@@ -2,7 +2,7 @@
 #include "serializer.hpp"
 
 
-void serializeTree(Tree &t, std::string ofilename){
+void serializeTree(Tree t, std::string ofilename){
 	std::cout << "SERIALIZER" << std::endl;
 	std::vector<std::string> out;
 	t.traverseTree(t.getRoot(),// Lambda expression begins

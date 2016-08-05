@@ -9,6 +9,19 @@ NodeInt::NodeInt(INode *p, T c){
 	content = c;
 };
 
+NodeInt::NodeInt(INode &n){
+	parent = n.getParent();
+	content = *(int*)n.getContent();
+	coord = n.getCoordinates();
+};
+
+INode& NodeInt::operator=(INode &n){
+	INode *p = new NodeInt(*(int*)n.getContent());
+	p->setParent(n.getParent());
+	p->setCoordinates(n.getCoordinates().lev, n.getCoordinates().pos);
+	return *p;
+};
+
 uint NodeInt::nodeType(){ return type;};
 
 void* NodeInt::getContent(){ return &content;};
@@ -64,10 +77,23 @@ NC NodeInt::getCoordinates(){
 NodeFl::NodeFl(){ };
 NodeFl::~NodeFl(){};
 NodeFl::NodeFl(T c): content(c){};
-NodeFl::NodeFl(INode *p){ parent = p; };
+
 NodeFl::NodeFl(INode *p, T c){
 	parent = p;
 	content = c;
+};
+
+NodeFl::NodeFl(INode &n){
+	parent = n.getParent();
+	content = *(float*)n.getContent();
+	coord = n.getCoordinates();
+};
+
+INode& NodeFl::operator=(INode &n){
+	INode *p = new NodeFl(*(float*)n.getContent());
+	p->setParent(n.getParent());
+	p->setCoordinates(n.getCoordinates().lev, n.getCoordinates().pos);
+	return *p;
 };
 
 uint NodeFl::nodeType(){ return type;};
@@ -131,6 +157,19 @@ NodeStr::NodeStr(INode *p){ parent = p; };
 NodeStr::NodeStr(INode *p, T c){
 	parent = p;
 	content = c;
+};
+
+NodeStr::NodeStr(INode &n){
+	parent = n.getParent();
+	content = *(std::string*)n.getContent();
+	coord = n.getCoordinates();
+};
+
+INode& NodeStr::operator=(INode &n){
+	INode *p = new NodeStr(*(std::string*)n.getContent());
+	p->setParent(n.getParent());
+	p->setCoordinates(n.getCoordinates().lev, n.getCoordinates().pos);
+	return *p;
 };
 
 uint NodeStr::nodeType(){ return type;};

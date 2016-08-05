@@ -60,6 +60,9 @@ public:
 	NodeInt(INode *p);
 	NodeInt(INode *p, T c);
 
+	NodeInt(INode &n);
+	INode& operator=(INode &n);
+
 	uint nodeType();
 
 	void* getContent();
@@ -101,8 +104,10 @@ public:
 	NodeFl();
 	~NodeFl();
 	NodeFl(T c);
-	NodeFl(INode *p);
 	NodeFl(INode *p, T c);
+
+	NodeFl(INode &n);
+	INode& operator=(INode &n);
 
 	uint nodeType();
 
@@ -148,6 +153,9 @@ public:
 	NodeStr(T c);
 	NodeStr(INode *p);
 	NodeStr(INode *p, T c);
+
+	NodeStr(INode &n);
+	INode& operator=(INode &n);
 
 	uint nodeType();
 

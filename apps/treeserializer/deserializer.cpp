@@ -113,7 +113,6 @@ Tree deserializeTree(std::string ifilename){
 			nodes.push_back(p);
 	}
 	
-	std::cout << "list of unordered nodes/>" << std::endl;
 	// nodes[0] is root of reconstructing tree
 	static Tree t(nodes[0]);
 

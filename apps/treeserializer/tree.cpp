@@ -10,7 +10,8 @@ Tree::Tree(const Tree &t){
 };
 
 Tree& Tree::operator=(const Tree &t){
-	root = t.root;
+	Tree *p = new Tree(t.root);
+	traverseTreeCP(t.root, p->root);
 };
 
 Tree::~Tree(){
@@ -88,5 +89,9 @@ void Tree::traverseTree(INode *pN, void (*F)(INode*, std::vector<std::string>&),
 		for(int i=0; i<cq; i++){
 			traverseTree(pN->getChild(i), F, v);
 		}
-	};
+};
+
+void Tree::traverseTreeCP(INode *sN, INode *dN){
+	
+};
 
