@@ -9,9 +9,7 @@ void serializeTree(Tree &t, std::string ofilename){
 		[](INode *n, std::vector<std::string> &o) {
 			NC cs = n->getCoordinates();
 
-
 			std::cout << "level=" << cs.lev << ", position=" << cs.pos << ": ";
-			std::string temps; 
 			
 			std::string fe('{' + std::to_string(cs.lev) + '.' + std::to_string(cs.pos)+ ':');
 

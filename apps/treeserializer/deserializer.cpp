@@ -112,8 +112,10 @@ Tree deserializeTree(std::string ifilename){
 			std::cout <<"\"" << std::endl;
 			nodes.push_back(p);
 	}
+	
+	std::cout << "list of unordered nodes/>" << std::endl;
 	// nodes[0] is root of reconstructing tree
-	Tree t(nodes[0]);
+	static Tree t(nodes[0]);
 
 	for(uint i=1, j=1; i<nodes.size(); i++){
 		INode *p = nodes[i];
@@ -138,11 +140,12 @@ Tree deserializeTree(std::string ifilename){
 			continue;
 		}
 		else{
-			t.appendNode( nodes[i-1]->getParent()->getParent());
+			t.appendNode( nodes[i-1]->getParent()->getParent(), p);
 			j = l;
 		}
 	}
-
+	
+	// Traverse of tree from "input" file
 	std::vector<std::string> out;
 	t.traverseTree(t.getRoot(),// Lambda expression begins
 		[](INode *n, std::vector<std::string> &o) {
@@ -170,10 +173,6 @@ Tree deserializeTree(std::string ifilename){
 			o.push_back(fe);
 		}// end of lambda expression
 	, out);
-
-	for(uint i=0; i<out.size(); i++)
-			std::cout << out[i] ;
-	std::cout<< std::endl;
 	
 	return t;
 }

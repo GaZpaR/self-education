@@ -10,7 +10,8 @@ class Tree{
 	INode *root;
 public:
 	Tree(INode *n);
-
+	Tree(const Tree &t);
+	Tree& operator=(const Tree &t);
 	~Tree();
 
 	// Appending to the root

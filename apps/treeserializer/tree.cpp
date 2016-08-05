@@ -4,6 +4,15 @@ Tree::Tree(INode *n){
 	root = n;
 };
 
+
+Tree::Tree(const Tree &t){
+	root = t.root;
+};
+
+Tree& Tree::operator=(const Tree &t){
+	root = t.root;
+};
+
 Tree::~Tree(){
 	delete root;
 };
@@ -11,20 +20,20 @@ Tree::~Tree(){
 // Appending to the root
 void Tree::appendNode(INode *n){
 	root->addChild(n);
-	n->setCoordinates(1, root->getChildrenQ());
+	//n->setCoordinates(1, root->getChildrenQ());
 	n->setParent(root);
 };
 
 // Appending to the node
 void Tree::appendNode(INode &n, INode *c){
 	n.addChild(c);
-	c->setCoordinates(n.getCoordinates().lev + 1, n.getChildrenQ());
+	//c->setCoordinates(n.getCoordinates().lev + 1, n.getChildrenQ());
 	c->setParent(&n);
 };
 
 void Tree::appendNode(INode *n, INode *c){
 	n->addChild(c);
-	c->setCoordinates(n->getCoordinates().lev + 1, n->getChildrenQ());
+	//c->setCoordinates(n->getCoordinates().lev + 1, n->getChildrenQ());
 	c->setParent(n);
 };
 

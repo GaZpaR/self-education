@@ -5,4 +5,4 @@
 #include "tree.hpp"
 #endif
 
-void serializeTree(Tree &p, std::string ofilename);
+void serializeTree(Tree &t, std::string ofilename);
