@@ -1,38 +1,11 @@
-#include <iostream>
 #include <fstream>
-#include "tree.h"
 #include "serializer.hpp"
 
-int main(int argc, char **argv){
 
-	INode *root = new NodeInt(root, 77);
-
-	NodeInt s(root, 363);
-	NodeFl s1(&s, (float)228.8);
-	NodeStr s2(&s, "s1");
-
-	NodeFl s11(&s1, (float)37.6), s12(&s1, (float)84);
-
-	NodeStr s21(&s2, "ABC"), s22(&s2, "BAC"), s23(&s2, "CAB");
-
-	Tree t(root);
-
-	t.appendNode(&s);
-	t.appendNode(s, &s1);
-	t.appendNode(s, &s2);
-	t.appendNode(s1, &s11);
-	t.appendNode(s1, &s12);
-
-	t.appendNode(s2, &s21);
-	t.appendNode(s2, &s22);
-	t.appendNode(s2, &s23);
-
-	t.appendNode(new NodeInt(root, 128));
-	t.appendNode(new NodeStr(root, "Hello, drug!!"));
-	
+void serializeTree(Tree &t, std::string ofilename){
+	std::cout << "SERIALIZER" << std::endl;
 	std::vector<std::string> out;
-
-	t.traverseTree(root,// Lambda expression begins
+	t.traverseTree(t.getRoot(),// Lambda expression begins
 		[](INode *n, std::vector<std::string> &o) {
 			NC cs = n->getCoordinates();
 
@@ -67,12 +40,10 @@ int main(int argc, char **argv){
 			std::cout<<out[i];
 	std::cout<<std::endl;
 	
-	std::ofstream file;
-	file.open("simpletree.txt");
-	for(uint i=0; i<out.size(); i++)
-		file<<out[i];
-	file.close();
-
-	std::cout << "Bye bye!" << std::endl;
-	return 0;
+	std::ofstream file(ofilename);
+	if(file.is_open()){
+		for(uint i=0; i<out.size(); i++)
+			file<<out[i];
+		file.close();
+	}
 }

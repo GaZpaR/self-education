@@ -1,6 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include "tree.h"
+#include "deserializer.hpp"
 
 INode* allocator(std::string exp){
 	uint j=1;
@@ -21,7 +19,7 @@ INode* allocator(std::string exp){
 
 			cs.pos = std::stoi(t);
 			j = i+1;
-			// Here we allocated cooedinates
+			// Here we allocated coordinates
 			break;
 		}
 	}
@@ -31,8 +29,8 @@ INode* allocator(std::string exp){
 	for(uint i=j; i<exp.length(); i++){
 		if(exp[i]>'9' || exp[i]<'-' || exp[i] == '/'){
 			// Content is string
-
 			INode *r = new NodeStr(tline);
+			r->setContent(tline);
 			r->setCoordinates(cs.lev, cs.pos);
 			return r;
 		}
@@ -54,18 +52,13 @@ INode* allocator(std::string exp){
 	return r;
 }
 
-void reconstructTree(Tree *t, INode *n){
-	
-}
-
-int main(int argc, char **argv){
-	if(argc < 2){
-		std::cout << "Not enough arguments" << std::endl;
-		std::cout << "Usage example is:" << std::endl;
-		std::cout << "./bin \"filename.filetype\"" << std::endl;
-		return -1;
+Tree deserializeTree(std::string ifilename){
+	std::cout << "DESERIALIZER" << std::endl;
+	if(ifilename.length() == 0){
+		std::cout << "File name which content is serialized tree is equal 0" << std::endl;
+		return (Tree)NULL;
 	}
-	std::ifstream inf(argv[1]);
+	std::ifstream inf(ifilename);
 	std::string line;
 	if(inf.is_open()) {
 		while ( std::getline (inf,line) ){
@@ -75,7 +68,7 @@ int main(int argc, char **argv){
 	}
   else{
 		std::cout << "Unable to open file" << std::endl;
-		return -2;
+		return (Tree)NULL;
 	}
 
 	// We should divide expression to the separate nodes
@@ -88,10 +81,10 @@ int main(int argc, char **argv){
 
 	if(obp.size() != cbp.size()){
 		std::cout<<"Expression have uncoupled brackets"<<std::endl;
-		return -3;
+		return (Tree)NULL;
 	}
 	
-	if(!obp.size() < 0) return -4;
+	if(!obp.size() < 0) return (Tree)NULL;
 
 	std::vector<INode*> nodes;
 	
@@ -179,7 +172,8 @@ int main(int argc, char **argv){
 	, out);
 
 	for(uint i=0; i<out.size(); i++)
-			std::cout << out[i] << std::endl;
+			std::cout << out[i] ;
+	std::cout<< std::endl;
 	
-	return 0;
+	return t;
 }
