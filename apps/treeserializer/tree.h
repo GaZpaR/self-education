@@ -35,6 +35,7 @@ public:
 	// Get link to parent node
 	virtual INode* getParent() = 0;
 	virtual INode* getParent(INode&) = 0;
+	virtual void setParent(INode*) = 0;
 
 	// Func to define type of node
 	virtual uint nodeType() = 0;
@@ -173,6 +174,11 @@ public:
 
 	INode* getParent(INode &p){ return p.getParent(); };
 
+	void setParent(INode *p){
+		parent = p;
+	};
+
+
 	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
@@ -244,6 +250,10 @@ public:
 					
 	INode* getParent(INode &p){ return p.getParent();};
 
+	void setParent(INode *p){
+		parent = p;
+	};
+
 	void changeParent(INode &pnode){
 		parent = &pnode;
 	};
@@ -273,17 +283,20 @@ public:
 	void appendNode(INode *n){
 		root->addChild(n);
 		n->setCoordinates(1, root->getChildrenQ());
+		n->setParent(root);
 	};
 
 	// Appending to the node
 	void appendNode(INode &n, INode *c){
 		n.addChild(c);
 		c->setCoordinates(n.getCoordinates().lev + 1, n.getChildrenQ());
+		c->setParent(&n);
 	};
 
 	void appendNode(INode *n, INode *c){
 		n->addChild(c);
 		c->setCoordinates(n->getCoordinates().lev + 1, n->getChildrenQ());
+		c->setParent(n);
 	};
 
 	void delNode(INode* n){
