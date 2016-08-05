@@ -54,6 +54,10 @@ INode* allocator(std::string exp){
 	return r;
 }
 
+void reconstructTree(Tree *t, INode *n){
+	
+}
+
 int main(int argc, char **argv){
 	if(argc < 2){
 		std::cout << "Not enough arguments" << std::endl;
@@ -113,7 +117,69 @@ int main(int argc, char **argv){
 					break;
 			}
 			std::cout <<"\"" << std::endl;
+			nodes.push_back(p);
+	}
+	// nodes[0] is root of reconstructing tree
+	Tree t(nodes[0]);
+
+	for(uint i=1, j=1; i<nodes.size(); i++){
+		INode *p = nodes[i];
+		uint l = p->getCoordinates().lev, pos = p->getCoordinates().pos;
+		
+		if(l == 1){
+			t.appendNode(nodes[i]);
+			j = l;
+			continue;
+		}
+
+		if(l == j){
+			if(pos>1)t.appendNode(nodes[i-1]->getParent(), p);
+			else t.appendNode(nodes[i-1], p);
+			j = l;
+			continue;
+		}
+
+		if(l > j){
+			t.appendNode(nodes[i-1], p);
+			j = l;
+			continue;
+		}
+		else{
+			t.appendNode( nodes[i-1]->getParent()->getParent());
+			j = l;
+		}
 	}
 
+	std::vector<std::string> out;
+	t.traverseTree(t.getRoot(),// Lambda expression begins
+		[](INode *n, std::vector<std::string> &o) {
+			NC cs = n->getCoordinates();
+
+			std::cout << "level=" << cs.lev << ", position=" << cs.pos << ": ";
+			std::string fe('{' + std::to_string(cs.lev) + '.' + std::to_string(cs.pos)+ ':');
+
+			switch(n->nodeType()){
+				case INT:
+					fe += std::to_string(*(int*)n->getContent());
+					std::cout <<  *(int*)n->getContent() << std::endl;
+					break;
+				case FLOAT:
+					fe += std::to_string(*(float*)n->getContent());
+					std::cout << *(float*)n->getContent() << std::endl;
+					break;
+				case STR:
+					fe += (*(std::string*)n->getContent());
+					std::cout << *(std::string*)n->getContent() << std::endl; 
+					break;
+				default: std::cout << "Undefined Node content type" << std::endl; break;
+			}
+			fe += "}";
+			o.push_back(fe);
+		}// end of lambda expression
+	, out);
+
+	for(uint i=0; i<out.size(); i++)
+			std::cout << out[i] << std::endl;
+	
 	return 0;
 }
