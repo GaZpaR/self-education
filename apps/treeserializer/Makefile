@@ -5,7 +5,7 @@ OPTS            := -Wextra -std=c++14
 LIBRARIES       :=
 
 all: nodes tree des ser main
-	$(CC) $(PROJPATH) $(OPTS) $(LIBRARIES) $(LIBPATH) -o sr main.o serializer.o deserializer.o tree.o nodes.o
+	$(CC) $(PROJPATH) $(OPTS) $(LIBRARIES) $(LIBPATH) -o sr *.o
 	rm -f *.o
 
 main: main.cpp
