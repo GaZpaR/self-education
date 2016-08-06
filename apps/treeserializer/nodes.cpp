@@ -1,7 +1,7 @@
 #include "nodes.hpp"
 
 NodeInt::NodeInt(){ };
-NodeInt::~NodeInt(){};
+NodeInt::~NodeInt(){ delete this;};
 NodeInt::NodeInt(T c): content(c){};
 NodeInt::NodeInt(INode *p){ parent = p; };
 NodeInt::NodeInt(INode *p, T c){
@@ -16,7 +16,7 @@ NodeInt::NodeInt(INode &n){
 };
 
 INode& NodeInt::operator=(INode &n){
-	INode *p = new NodeInt(*(int*)n.getContent());
+	INode *p = new NodeInt (*(int*)n.getContent());
 	p->setParent(n.getParent());
 	p->setCoordinates(n.getCoordinates().lev, n.getCoordinates().pos);
 	return *p;
@@ -75,7 +75,7 @@ NC NodeInt::getCoordinates(){
 }
 
 NodeFl::NodeFl(){ };
-NodeFl::~NodeFl(){};
+NodeFl::~NodeFl(){ delete this;};
 NodeFl::NodeFl(T c): content(c){};
 
 NodeFl::NodeFl(INode *p, T c){
@@ -151,7 +151,7 @@ NC NodeFl::getCoordinates(){
 
 
 NodeStr::NodeStr(){ };
-NodeStr::~NodeStr(){};
+NodeStr::~NodeStr(){ delete this;};
 NodeStr::NodeStr(T c): content(c){};
 NodeStr::NodeStr(INode *p){ parent = p; };
 NodeStr::NodeStr(INode *p, T c){

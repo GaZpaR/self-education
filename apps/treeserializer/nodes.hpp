@@ -55,7 +55,7 @@ private:
 	NC coord;
 public:
 	NodeInt();
-	virtual ~NodeInt();
+	~NodeInt();
 	NodeInt(T c);
 	NodeInt(INode *p);
 	NodeInt(INode *p, T c);

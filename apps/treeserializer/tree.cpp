@@ -4,18 +4,10 @@ Tree::Tree(INode *n){
 	root = n;
 };
 
-
-Tree::Tree(const Tree &t){
-	root = t.root;
-};
-
 Tree& Tree::operator=(const Tree &t){
 	Tree *p = new Tree(t.root);
-	traverseTreeCP(t.root, p);
-};
-
-Tree::~Tree(){
-	delete root;
+	traverseTreeCP(t.root, p, p->getRoot());
+	return *p;
 };
 
 // Appending to the root
@@ -91,39 +83,44 @@ void Tree::traverseTree(INode *pN, void (*F)(INode*, std::vector<std::string>&),
 		}
 };
 
-void Tree::traverseTreeCP(INode *sN, Tree *dN){
-	//INode cel = *sN;
+void Tree::traverseTreeCP(INode *sN, Tree *dN, INode *lN){
+	INode static *cel;
+	switch(sN->nodeType()){
+		case INT: cel = new NodeInt(*sN); break;	
+		case FLOAT: cel = new NodeFl(*sN); break;	
+		case STR: cel = new NodeStr(*sN); break;	
+	}
 
 	static uint level = 0;
 	level++;
 	uint l = sN->getCoordinates().lev, p = sN->getCoordinates().pos;
-/*
+
 	if(l == 1){
-		dN.appendNode(sN);
+		dN->appendNode(cel);
 		level = l;
 	}
 
 	if(l == level){
-		if(p>1)t.appendNode(sN->getParent(), dN.;
-		else t.appendNode(sN, p);
+		if(p>1)dN->appendNode(lN->getParent(), cel);
+		else dN->appendNode(lN, cel);
 		level = l;
 	}
 
 	if(l > level){
-		t.appendNode(nodes[i-1], p);
+		dN->appendNode(lN, cel);
 		level = l;
 	}	
 	else{
-		t.appendNode( nodes[i-1]->getParent()->getParent(), p);
+		dN->appendNode( lN->getParent()->getParent(), cel);
 		level = l;
 	}
 
 	uint chq = sN->getChildrenQ();
 	if(chq > 0){
 		for(uint i=0; i<chq; i++){
-			dN->appendNode(sN->getChild(i));
+			traverseTreeCP(sN->getChild(i), dN, cel);
 		}
-	}*/
+	}
 	level--;
 };
 

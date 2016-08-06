@@ -8,9 +8,7 @@ class Tree{
 	INode *root;
 public:
 	Tree(INode *n);
-	Tree(const Tree &t);
 	Tree& operator=(const Tree &t);
-	~Tree();
 
 	// Appending to the root
 	void appendNode(INode *n);
@@ -30,5 +28,5 @@ public:
 
 	void traverseTree(INode *pN, void (*F)(INode*, std::vector<std::string>&), std::vector<std::string> &v);
 
-	void traverseTreeCP(INode *sN, Tree *dN);
+	void traverseTreeCP(INode *sN, Tree *dN, INode *lN);
 };
