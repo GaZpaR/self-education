@@ -37,7 +37,7 @@ void serializeTree(Tree t, std::string ofilename){
 	for(uint i=0; i<out.size(); i++)
 			std::cout<<out[i];
 	std::cout<<std::endl;
-	
+
 	std::ofstream file(ofilename);
 	if(file.is_open()){
 		for(uint i=0; i<out.size(); i++)

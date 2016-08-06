@@ -2,9 +2,7 @@
 #include <string.h>
 #include <vector>
 
-#ifndef MAIN
 #include "nodes.hpp"
-#endif
 
 class Tree{
 	INode *root;
@@ -31,5 +29,6 @@ public:
 	void* visit(INode *pN);
 
 	void traverseTree(INode *pN, void (*F)(INode*, std::vector<std::string>&), std::vector<std::string> &v);
-	void traverseTreeCP(INode *sN, INode *dN);
+
+	void traverseTreeCP(INode *sN, Tree *dN);
 };

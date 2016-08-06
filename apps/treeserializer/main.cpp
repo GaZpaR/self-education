@@ -1,6 +1,4 @@
 #define MAIN
-
-#include "nodes.hpp"
 #include "tree.hpp"
 
 #include <iostream>

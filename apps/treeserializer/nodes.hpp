@@ -2,10 +2,10 @@
 #include <string.h>
 #include <vector>
 
-typedef struct Ncoordinates{
+struct NC{
 	uint lev;
 	uint pos;
-}NC;
+};
 
 enum{
 	INT = 0,
@@ -55,7 +55,7 @@ private:
 	NC coord;
 public:
 	NodeInt();
-	~NodeInt();
+	virtual ~NodeInt();
 	NodeInt(T c);
 	NodeInt(INode *p);
 	NodeInt(INode *p, T c);
@@ -102,7 +102,7 @@ private:
 	NC coord;
 public:
 	NodeFl();
-	~NodeFl();
+	virtual ~NodeFl();
 	NodeFl(T c);
 	NodeFl(INode *p, T c);
 
@@ -149,7 +149,7 @@ private:
 	NC coord;
 public:
 	NodeStr();
-	~NodeStr();
+	virtual ~NodeStr();
 	NodeStr(T c);
 	NodeStr(INode *p);
 	NodeStr(INode *p, T c);
