@@ -8,7 +8,7 @@
 using boost::asio::ip::tcp;
 
 typedef struct{
-	uint clientid;
+	std::string clientid;
 	std::string datetime;
 	std::string p1;
 	std::string p2;
@@ -16,20 +16,78 @@ typedef struct{
 	std::string p4;
 }MESS;
 
-void writexml(std::shared_ptr<std::vector<MESS>> &b){
+void writexml(std::vector<MESS> &b){
+//void writexml(std::shared_ptr<std::vector<MESS>> &b){
 	
 };
 
-std::shared_ptr<std::vector<MESS>> cb, pb;
+std::vector<MESS> cb, pb;
+//std::shared_ptr<std::vector<MESS>> cb, pb;
 
-void parser(std::string str, const uint maxlen){
+void parser(std::string &str, const uint maxlen){
+	MESS curmes;
+	time_t now = std::time(0);
+ 	curmes.datetime = std::ctime(&now);
 
-	if(cb->size() < maxlen){
+	if(cb.size() < maxlen){
 		// Writing in current buffer
+		uint j = 0;
+
+		for(uint i=0; i<str.length(); i++){
+			if(str[i] == '#') j = i;
+				// Message start
+			if(str[i] == ','){
+				// Client ID
+				curmes.clientid.assign(str, j+1, i-j-1);
+				j = i+1;
+				break;
+			}
+		}
+	
+		for(uint i=j; i<str.length(); i++){
+			if(str[i] == ','){
+				// P1
+				curmes.p1.assign(str, j, i-j);
+				j = i+1;
+				break;
+			}
+		}
+		for(uint i=j; i<str.length(); i++){
+			if(str[i] == ','){
+				// P2
+				curmes.p2.assign(str, j, i-j);
+				j = i+1;
+				break;
+			}
+		}
+		for(uint i=j;i <str.length(); i++){
+			if(str[i] == ','){
+				// P3
+				curmes.p3.assign(str, j, i-j);
+				j = i+1;
+				break;
+			}
+		}
+		for(uint i=j;i <str.length(); i++){
+			if(str[i] == '$'){
+				// P4
+				curmes.p4.assign(str, j, i-j);
+				j = i+1;
+				break;
+			}
+		}
+		std::cout << "Client ID: " << curmes.clientid << std::endl;
+		std::cout << "Current time: " << curmes.datetime;
+		std::cout << "P1: " << curmes.p1 << std::endl;
+		std::cout << "P2: " << curmes.p2 << std::endl;
+		std::cout << "P3: " << curmes.p3 << std::endl;
+		std::cout << "P4: " << curmes.p4 << std::endl;
+		cb.push_back(curmes);
 	}
 	else{
 		// Changing current buffer and writing mess to the new buffer
-		std::shared_ptr<std::vector<MESS>> tp;
+		std::vector<MESS> tp;
+		//std::shared_ptr<std::vector<MESS>> tp;
 		tp = cb;
 		cb = pb;
 		pb = tp;
@@ -64,8 +122,13 @@ void session(socket_ptr sock)
 			else if (error)
 						throw boost::system::system_error(error); // Some other error.
 
-
-
+			std::string s;
+			s.assign(data, 0, length);
+			parser(s, 50);
+/*			std::cout << s << std::endl;
+			boost::thread t(boost::bind(parser, s, 50));
+			t.detach();
+*/
 			boost::asio::write(*sock, boost::asio::buffer(data, length));
 			sock->close(error);
 			if(error){
