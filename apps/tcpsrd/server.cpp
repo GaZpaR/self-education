@@ -4,6 +4,11 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+
+#include "server.hpp"
+
+boost::mutex tbuf, wrbuf;
 
 using boost::asio::ip::tcp;
 
@@ -16,20 +21,27 @@ typedef struct{
 	std::string p4;
 }MESS;
 
+std::vector<MESS> cb, pb, *buffer = &cb;
+
+boost::shared_ptr<bool> bufswitch(new bool);
+
 void writexml(std::vector<MESS> &b){
-//void writexml(std::shared_ptr<std::vector<MESS>> &b){
-	
+	wrbuf.lock();
+	b.erase(b.begin(), b.end());
+	wrbuf.unlock();
 };
 
-std::vector<MESS> cb, pb;
-//std::shared_ptr<std::vector<MESS>> cb, pb;
+void writeRestMessages(){
+	tbuf.lock();
+
+	tbuf.unlock();
+}
 
 void parser(std::string &str, const uint maxlen){
 	MESS curmes;
 	time_t now = std::time(0);
  	curmes.datetime = std::ctime(&now);
-
-	if(cb.size() < maxlen){
+	if(buffer->size() < maxlen){
 		// Writing in current buffer
 		uint j = 0;
 
@@ -72,7 +84,6 @@ void parser(std::string &str, const uint maxlen){
 			if(str[i] == '$'){
 				// P4
 				curmes.p4.assign(str, j, i-j);
-				j = i+1;
 				break;
 			}
 		}
@@ -82,92 +93,82 @@ void parser(std::string &str, const uint maxlen){
 		std::cout << "P2: " << curmes.p2 << std::endl;
 		std::cout << "P3: " << curmes.p3 << std::endl;
 		std::cout << "P4: " << curmes.p4 << std::endl;
-		cb.push_back(curmes);
+
+		tbuf.lock();
+		buffer->push_back(curmes);
+		tbuf.unlock();
 	}
 	else{
 		// Changing current buffer and writing mess to the new buffer
-		std::vector<MESS> tp;
-		//std::shared_ptr<std::vector<MESS>> tp;
-		tp = cb;
-		cb = pb;
-		pb = tp;
+		tbuf.lock();
+		wrbuf.lock();
+		std::vector<MESS> *tp = buffer;
+		if(*bufswitch){
+			buffer = &pb;
+			*bufswitch = false;
+		}
+		else{
+			buffer = &cb;
+			*bufswitch = true;
+		}
+		tbuf.unlock();
+		wrbuf.unlock();
 
-		// Generating thread to write previous buffer to the disk
+		// Write previous buffer to the disk
 		// and erase it
-		boost::thread t(boost::bind(writexml, pb));
-		t.detach();
+		writexml(*tp);
 		parser(str, maxlen);
 	}
 }
 
-//	time_t t = time(NULL);
-//	struct tm tm = *localtime(&t);
-
-//	printf("now: %d-%d-%d %d:%d:%d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-//
-const int max_length = 1024;
+const int max_length = 256;
 
 typedef boost::shared_ptr<tcp::socket> socket_ptr;
 
-void session(socket_ptr sock)
+void session(socket_ptr sock, const uint buflen)
 {
 	try{
-		for (;;){
 			char data[max_length];
 
 			boost::system::error_code error;
 			size_t length = sock->read_some(boost::asio::buffer(data), error);
 			if (error == boost::asio::error::eof)
-				break; // Connection closed cleanly by peer.
+				std::cout << "Connection closed cleanly by peer" << std::endl; 
 			else if (error)
 						throw boost::system::system_error(error); // Some other error.
 
 			std::string s;
 			s.assign(data, 0, length);
-			parser(s, 50);
-/*			std::cout << s << std::endl;
-			boost::thread t(boost::bind(parser, s, 50));
-			t.detach();
-*/
+			parser(s, buflen);
 			boost::asio::write(*sock, boost::asio::buffer(data, length));
-			sock->close(error);
+/*			sock->close(error);
 			if(error){
 				std::cout << "Can't close socket" << std::endl;
-			}
-			else break;
-		}
+			}*/
 	}
 	catch (std::exception& e)	{
 		std::cerr << "Exception in thread: " << e.what() << "\n";
 	}
 }
 
-void server(boost::asio::io_service& io_service, short port)
+void server(boost::asio::io_service& io_service, short port, const uint buflen)
 {
 	tcp::acceptor a(io_service, tcp::endpoint(tcp::v4(), port));
 	for (;;){
 		socket_ptr sock(new tcp::socket(io_service));
 		a.accept(*sock);
-		boost::thread t(boost::bind(session, sock));
+		boost::thread t(boost::bind(session, sock, buflen));
 	}
 }
 
-int main(int argc, char* argv[])
+void startServer(const uint portNo, const uint buflen)
 {
 	try{
-		if (argc != 2){
-			std::cerr << "Usage: blocking_tcp_echo_server <port>\n";
-			return 1;
-		}
-
 		boost::asio::io_service io_service;
 
-		using namespace std; // For atoi.
-		server(io_service, atoi(argv[1]));
+		server(io_service, portNo, buflen);
 	}
 	catch (std::exception& e){
 		std::cerr << "Exception: " << e.what() << "\n";
 	}
-
-	return 0;
 }
