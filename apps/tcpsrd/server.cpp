@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <boost/bind.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/asio.hpp>
@@ -27,20 +28,38 @@ boost::shared_ptr<bool> bufswitch(new bool);
 
 void writexml(std::vector<MESS> &b){
 	wrbuf.lock();
+	std::ofstream xml ("data.xml", std::ios::app);
+  if (xml.is_open()){
+		xml << "<block>\n";
+		for(uint i=0; i<b.size(); i++){
+			xml << "<ID>" << b[i].clientid << "</ID>\n";
+			xml <<"\t<curdate>"<< b[i].datetime << "</curdate>\n";
+			xml <<"\t\t<p1>"<< b[i].p1 << "</p1>\n";
+			xml <<"\t\t<p2>"<< b[i].p2 << "</p2>\n";
+			xml <<"\t\t<p3>"<< b[i].p3 << "</p3>\n";
+			xml <<"\t\t<p4>"<< b[i].p4 << "</p4>\n";
+		}
+		xml << "</block>\n";
+    xml.close();
+  }
+  else std::cout << "Unable to open file" << std::endl;
+
 	b.erase(b.begin(), b.end());
+
 	wrbuf.unlock();
 };
 
 void writeRestMessages(){
 	tbuf.lock();
-
+	writexml(*buffer);
 	tbuf.unlock();
 }
 
 void parser(std::string &str, const uint maxlen){
 	MESS curmes;
 	time_t now = std::time(0);
- 	curmes.datetime = std::ctime(&now);
+ 	std::string s = std::ctime(&now);
+	curmes.datetime.assign(s, 0, s.length() - 6);
 
 	bool flag; 
 
