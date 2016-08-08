@@ -8,18 +8,25 @@
 #include <fcntl.h>
 #include <time.h>
 
+#include "server.hpp"
+
 static void sig_handler(int signo){
 	switch(signo){
 		case SIGINT: printf("sig_handler:SIGINT\r\n"); break;
-		case SIGQUIT: printf("sig_handler:SIGQUIT\r\n"); /*exit(EXIT_SUCCESS);*/ break;
-		case SIGTERM: printf("sig_handler:SIGTERM\r\n"); break;
 		default: printf("sig_handler:Udefined signal\r\n"); break;
-	}
+		case SIGQUIT: printf("sig_handler:SIGQUIT\r\n"); break;
+		case SIGTERM: printf("sig_handler:SIGTERM\r\n"); break;
+		}
+		writeRestMessages();
+		exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv){
-	printf( "Hello, drug!\r\n");
-
+	if(argc != 3){
+		printf( "Wrong usage of demon\r\n");
+		printf( "./bin portnumber bufferlength\r\n");
+		return -1;
+	}
 	if(signal(SIGINT, sig_handler) == SIG_ERR){
 		fprintf( stderr, "Cant handle signals INT\r\n");
 		exit(EXIT_FAILURE);
@@ -35,15 +42,6 @@ int main(int argc, char **argv){
 		exit(EXIT_FAILURE);
 	}
 
-	raise(SIGINT);
-	raise(SIGTERM);
-	raise(SIGQUIT);
-
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
-	printf("now: %d-%d-%d %d:%d:%d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-	
 	pid_t cpid = getpid();
 	printf("Current PID:%jd\r\n", cpid);
 	char buf[32];
@@ -64,6 +62,9 @@ int main(int argc, char **argv){
 	if(close(fd) == -1){
 		perror("Closing PID file");
 	}
+
+	startServer(std::stoi(argv[1]), std::stoi(argv[2]));
+
 	printf("Bye bye, drug\r\n");
 	return 0;
 }
