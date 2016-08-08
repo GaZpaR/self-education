@@ -45,7 +45,7 @@ void writexml(std::vector<MESS> &b){
   else std::cout << "Unable to open file" << std::endl;
 
 	b.erase(b.begin(), b.end());
-
+	sleep(5);
 	wrbuf.unlock();
 };
 
