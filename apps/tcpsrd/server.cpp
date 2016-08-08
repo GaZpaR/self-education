@@ -41,7 +41,15 @@ void parser(std::string &str, const uint maxlen){
 	MESS curmes;
 	time_t now = std::time(0);
  	curmes.datetime = std::ctime(&now);
-	if(buffer->size() < maxlen){
+
+	bool flag; 
+
+	tbuf.lock();
+	if(buffer->size() < maxlen) flag = true;
+	else flag = false;
+	tbuf.unlock();
+
+	if(flag){
 		// Writing in current buffer
 		uint j = 0;
 
