@@ -14,7 +14,8 @@ T power(T num, T pow){
 }
 
 int main(int argc, char **argv)
-{
+{	
+	if(argc < 3) return -1;
 	int
 	a = atoi(argv[1]),
 	pw = atoi(argv[2]);
