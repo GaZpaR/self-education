@@ -1,28 +1,6 @@
 #include <iostream>
 #include <string>
 
-class CNT{
-private:
-	uint *p;
-	uint size;
-	uint *gamma;
-public:
-	CNT(uint *ptr, uint s, uint *g):
-			p(ptr), size(s), gamma(g){};
-	void up(){
-		for(uint i=0; i<size; i++){
-			if(p[i] < gamma[i]-1)	{
-					p[i]++;
-					break;
-			}
-
-			if(p[i] == gamma[i]-1)
-				p[i] = 0;
-			
-		}
-	}
-};
-
 template<typename T>
 void mtxeval(T *mtx, uint raws, uint cols){
 	// Input matrix is
@@ -92,9 +70,6 @@ void mtxeval(T *mtx, uint raws, uint cols){
 	for(uint i=0; i<raws; i++)
 		C[i] = 0;
 
-	// Special object to up counters of combinations
-	CNT cnt(C, raws, gamma);
-
 	for(uint i=0; i<maxcom; i++){
 		
 		for(uint k=0; k<raws; k++)
@@ -110,8 +85,6 @@ void mtxeval(T *mtx, uint raws, uint cols){
 				C[j] = 0;
 			
 		}
-
-		//cnt.up();
 	}
 
 	std::cout <<"ksi matrix of combinations is: " << std::endl;
