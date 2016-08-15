@@ -24,16 +24,18 @@ public:
 };
 
 template<typename T>
-void mtxeval(T *mtx[], uint raws, uint cols){
+void mtxeval(T *mtx, uint raws, uint cols){
 	// Input matrix is
+	std::cout << "Input matrix is:"	<< std::endl;
 	for(uint i=0; i<raws; i++){
 		std::cout << i << ": ";
 		for(uint j=0; j<cols; j++){
-			std::cout << "\t" << mtx[i][j];
+			std::cout << "\t" << mtx[i*cols + j];
 		}
 		std::cout << std::endl;
 	}
-	// gamma is quantity of possible variants in iput matrix raws
+
+	// gamma is quantity of possible variants in input matrix raws
 	uint gamma[raws];
 	for(uint i=0; i<raws; i++)
 		gamma[i] = 0;
@@ -46,10 +48,11 @@ void mtxeval(T *mtx[], uint raws, uint cols){
 			lambda[i][j] = 0;
 		}
 	}
+
 	for(uint i=0; i<raws; i++){
 		uint shift = 0;
 		for(uint j=0; j<cols; j++){
-			if(mtx[i][j] != 0){
+			if(mtx[i*cols + j] != 0){
 				lambda[i][shift] = j;
 				gamma[i]++;
 				shift++;
@@ -77,7 +80,7 @@ void mtxeval(T *mtx[], uint raws, uint cols){
 	for(uint i=0; i<raws; i++)
 		maxcom *= gamma[i];
 
-	std::cout <<"maxcom=" << maxcom << std::endl;
+	std::cout <<"Maximum of combinations is: " << maxcom << std::endl;
 	uint *ksi[maxcom];
 	for(uint i=0; i<maxcom; i++){
 		ksi[i] = new uint[raws];
@@ -97,9 +100,21 @@ void mtxeval(T *mtx[], uint raws, uint cols){
 		for(uint k=0; k<raws; k++)
 			ksi[i][k] = lambda[k][C[k]];
 
-		cnt.up();
+		for(uint j=0; j<raws; j++){
+			if(C[j] < gamma[j]-1)	{
+					C[j]++;
+					break;
+			}
+
+			if(C[j] == gamma[j]-1)
+				C[j] = 0;
+			
+		}
+
+		//cnt.up();
 	}
 
+	std::cout <<"ksi matrix of combinations is: " << std::endl;
 	// Show result
 	for(uint i=0; i<maxcom; i++){
 		std::cout << i << ":";
@@ -110,6 +125,7 @@ void mtxeval(T *mtx[], uint raws, uint cols){
 }
 
 int main(int argc, char **argv){
+	std::cout << "This is simple matrix evaluator" << std::endl;
 	/*if(argc < 3){
 		std::cout << "Not enough args to ceate matrix" << std::endl;
 		return -1;
@@ -118,25 +134,25 @@ int main(int argc, char **argv){
 
 	std::cout << "x=" << x << ", y=" << y << std::endl;
 */
-	uint *MTX[3];
-	for(uint i=0; i<4; i++)
-		MTX[i] = new uint[3];
-	
-	MTX[0][0] = 1;
-	MTX[0][1] = 1;
-	MTX[0][2] = 0;
-	MTX[1][0] = 1;
-	MTX[1][1] = 1;
-	MTX[1][2] = 1;
-	MTX[2][0] = 1;
-	MTX[2][1] = 0;
-	MTX[2][2] = 1;
-	MTX[3][0] = 1;
-	MTX[3][1] = 0;
-	MTX[3][2] = 1;
+	uint MTX[4*3];
+
+	MTX[0] = 1;
+	MTX[1] = 1;
+	MTX[2] = 0;
+	MTX[3] = 1;
+	MTX[4] = 1;
+	MTX[5] = 1;
+	MTX[6] = 1;
+	MTX[7] = 0;
+	MTX[8] = 1;
+	MTX[9] = 1;
+	MTX[10] = 0;
+	MTX[11] = 1;
+
+	std::cout << "Matrix MTX[4x3]" << std::endl;
 	mtxeval<uint>(MTX, 4, 3);
 
-	std::cout << "Simple matrix evaluator" << std::endl;
+	std::cout << "Bye bye!" << std::endl;
 	return 0;
 }
 
