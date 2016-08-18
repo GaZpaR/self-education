@@ -16,20 +16,15 @@ int main(int argc, char **argv){
 	int val = *it;
 	while(true){
 
-		++it;
-		if(it == lst.end()){
-			if((val + (*it)) == 10){
-				it = lst.erase(it);
-			}
-			break;
-		}
-	
+		it++;
+
 		if((val + (*it)) == 10){
 			it = lst.erase(it);
 			it--;
 		}
 		else val = *it;
 
+		if(it == lst.end()) break;
 
 	}
 	std::cout << "Show result list" << std::endl;
