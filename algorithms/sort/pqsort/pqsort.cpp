@@ -1,4 +1,5 @@
 #include <iostream>
+#include "ifacesort.h"
 
 #define DEFAULT_QUEUE_SIZE 256
 
@@ -35,17 +36,14 @@ private:
 	T *queue_;
 	int N;
 public:
-	pqueue(){
-		queue_ = new T[DEFAULT_QUEUE_SIZE+1];
+
+	pqueue(uint32_t size = DEFAULT_QUEUE_SIZE+1){
+		queue_ = new T[size+1];
 		N = DEFAULT_QUEUE_SIZE;
 	}
-	pqueue(int size){
-		if(size > 0)	queue_ = new T[size+1];
-		else	std::cout << "Queue have 0 size" <<std:: endl;
-		N = 0;
-	}
+
 	~pqueue(){
-		//delete queue_;
+		delete[] queue_;
 	}
 
 	int empty() const{
@@ -86,20 +84,20 @@ void heapsort1(T a[], int l, int r){
 
 template<class T> void SiftDown(T* const heap, int i, int const n)
 {
-	int nMax( i );
+	int nMax(i);
 
-	T const value( heap[i] );
+	T const value(heap[i]);
 
-	while ( true )
+	while (true)
 	{
 		int childN( i*2+1 );
-		if ( ( childN < n ) && ( heap[childN] > value      ) )
+		if ((childN < n) && (heap[childN] > value))
 		  nMax = childN;
 
 		++childN;
-		if ( ( childN < n ) && ( heap[childN] > heap[nMax] ) )
+		if ((childN < n) && (heap[childN] > heap[nMax]))
 		  nMax = childN;
-		if ( nMax == i ) break;
+		if (nMax == i) break;
 		heap[i] = heap[nMax]; heap[nMax] = value;
 		i = nMax;
 
@@ -117,26 +115,46 @@ void heapsort(T* const heap, int n)
 			SiftDown(heap, 0, n);
 		}
 }
-int main(int argc, char *argv[])
+
+void sort(int *a, uint32_t m, uint32_t j){
+	heapsort(a, j+1);
+}
+
+void help(void);
+
+int main(int argc, char **argv)
 {
-	if(argc < 1) return -1;
-	int i, N = atoi(argv[1]);
-	if(N<2) return -2;
-
-	int *a = new int[N];
-
-	std::cout<<"Software way to create unsorted array a"<<std::endl;
-	for(i=0; i < N; i++) a[i] = 200*(1.0*rand()/RAND_MAX);
-	for(i=0; i < N; i++) std::cout<<a[i]<<" ";
-	std::cout<<std::endl;
-
-
-	heapsort(a, N);
-	//heapsort1(a, 0, N-1);
-
-	std::cout<<"Sorted array with heap-ordered tree is:"<<std::endl;
-	for(i=0; i < N; i++) std::cout<<a[i]<<" ";
-	std::cout<<"\n Bye bye!!!\n";
-
+	if(argc < 3 || argc > 5){
+		help();
+		return -1;
+	}
+	void (*sf)(int*, uint32_t, uint32_t) = sort;
+	sorter *sp;
+	switch(argc){
+		case 5:{
+			sp = new sorter(atoi(argv[1]), atoi(argv[2]), argv[3]);
+			sp->sort(sf);
+			sp->writeArrayToFile(argv[4]);
+			break;
+		}
+		default:{
+			sp = new sorter(SOFTWARE, atoi(argv[2]));
+			sp->printArray();
+			sp->sort(sf);
+			sp->printArray();
+			break;
+		}
+	}
+	std::cout << "time: "<< sp->getSpendedTime() << std::endl;
+	delete sp;
 	return 0;
+}
+
+void help(void){
+	std::cout << "Wrong usage!!!" << std::endl;
+	std::cout << "Arguments: ['inputArrayType' 'arraySize' 'inputArrayFile' 'outputArrayFile']" << std::endl;
+	std::cout << "inputArrayTypes: 0- manual input; 1- create array using rand(); 2- read array from file." << std::endl;
+	std::cout << "Examples:" << std::endl;
+	std::cout << "./sort 1 69" << std::endl;
+	std::cout << "./sort 2 100 \"unsorted_array\" \"sorted_array\"" << std::endl;
 }

@@ -1,8 +1,11 @@
-CC	:= g++
-CF	:= -Wextra -std=c++14
+CC	:= clang++
+CF	:= -Wextra -std=c++14 #-I./ -L./ -lutil
 
-all: bubble.cpp
-	$(CC) $(CF) -o sort bubble.cpp
+bubble: ifacesort.o bubble.cpp 
+	$(CC) $(CF) bubble.cpp ifacesort.o -o sort 
+
+ifacesort.o: ifacesort.cpp
+	$(CC) $(CF) ifacesort.cpp -c 
 
 clear:
 	rm -f *.o

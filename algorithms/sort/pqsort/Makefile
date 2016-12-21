@@ -1,8 +1,12 @@
 CC	:= g++
-CF	:= -Wextra -std=c++14
+CFLAGS	:= -Wextra -std=c++14 -I../
+VPATH = ..
 
-all: pqsort.cpp
-	$(CC) $(CF) -o sort pqsort.cpp
+pqsort: ifacesort.o pqsort.cpp 
+	$(CC) $(CFLAGS) -o sort pqsort.cpp ifacesort.o
+
+ifacesort.o: ifacesort.cpp
+	$(CC) $(CFLAGS) -c ../ifacesort.cpp 
 
 clear:
 	rm -f *.o

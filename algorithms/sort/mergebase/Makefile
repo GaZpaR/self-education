@@ -1,8 +1,12 @@
 CC	:= g++
-CF	:= -Wextra -std=c++14
+CFLAGS	:= -Wextra -std=c++14 -I../
+VPATH = ..
 
-all: mergeb.cpp
-	$(CC) $(CF) -o sort mergeb.cpp
+mergebase: ifacesort.o mergeb.cpp 
+	$(CC) $(CFLAGS) -o sort mergeb.cpp ifacesort.o
+
+ifacesort.o: ifacesort.cpp
+	$(CC) $(CFLAGS) -c ../ifacesort.cpp 
 
 clear:
 	rm -f *.o
