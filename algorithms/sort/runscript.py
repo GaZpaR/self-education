@@ -6,9 +6,9 @@ def runBenchmark(power, sortName):
     print "| Sort type: " + sortName + " |"
     print "------------------------------------------"
     for arraySize in range(5,power):
-        f = pow(2, arraySize)
-        print "Quantity of elements in array: " + str(f)
-        out = subprocess.check_output(["./" + sortName + "/sort", "1", str(f)])
+        quantity = pow(2, arraySize)
+        print "Quantity of elements in array: " + str(quantity)
+        out = subprocess.check_output(["./" + sortName + "/sort", "1", str(quantity)])
         resultList = out.splitlines(True)
         s = resultList[len(resultList)-1]
         print "Spended for sort " + s[0: len(s)-2] + " ms"
