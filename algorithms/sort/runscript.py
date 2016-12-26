@@ -11,7 +11,10 @@ def runBenchmark(power, sortName):
         out = subprocess.check_output(["./" + sortName + "/sort", "1", str(quantity)])
         resultList = out.splitlines(True)
         s = resultList[len(resultList)-1]
-        print "Spended for sort " + s[0: len(s)-2] + " ms"
+        # Truncate 's', because last symbol is '\n'
+        s = s[:len(s)-2]
+        print "Spended for sort " + s + " ms"
+        #print "Spended for sort " + s[0: len(s)-2] + " ms"
         print "------------------------------------------"
 
 #Elementary sort

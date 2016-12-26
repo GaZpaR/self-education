@@ -1,8 +1,12 @@
 CC	:= g++
-CF	:= -Wextra -std=c++14
+CFLAGS	:= -Wextra -std=c++14 -I../
+VPATH = ..
 
-all: lsd.cpp
-	$(CC) $(CF) -o sort lsd.cpp
+insertion: ifacesort.o  lsd.cpp 
+	$(CC) $(CFLAGS) -o sort lsd.cpp ifacesort.o
+
+ifacesort.o: ifacesort.cpp
+	$(CC) $(CFLAGS) -c ../ifacesort.cpp 
 
 clear:
 	rm -f *.o
