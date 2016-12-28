@@ -27,8 +27,8 @@ void sort(Item array[], uint32_t n, uint32_t m){
 #endif
 
 #ifdef SORTTYPE2
-	for(int i = m; i > 0; i--){
-		for(int j=i; j < m+1; j++){
+	for(uint i = m; i > 0; i--){
+		for(uint j=i; j < m+1; j++){
 			comparisonexchange(array[j-1], array[j]);
 			if(array[j-1] > array[j]) break;
 		}

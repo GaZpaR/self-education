@@ -1,12 +1,14 @@
-CC	:= g++
-CFLAGS	:= -Wextra -std=c++14 -I../
-VPATH = ..
+CC	:= clang++
+CF	:= -Wextra -std=c++14 #-I./ -L./ -lutil
+VPATH = ../
+INC = -I../
+OBJS = $(patsubst %.cpp, %.o, ifacesort.cpp)
 
-insertion: ifacesort.o  insertion.cpp 
-	$(CC) $(CFLAGS) -o sort insertion.cpp ifacesort.o
+insertion: $(OBJS) insertion.cpp 
+	$(CC) $(CF) $(INC) $^ -o sort 
 
-ifacesort.o: ifacesort.cpp
-	$(CC) $(CFLAGS) -c ../ifacesort.cpp 
+%.o: %.cpp
+	$(CC) $(CF) $^ -c 
 
 clear:
 	rm -f *.o

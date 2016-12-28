@@ -1,5 +1,11 @@
+DIR = insertion bubble
 
-bubble_sort: 
+all: $(addsuffix _sort, $(DIR))
+
+%_sort: 
 	$(MAKE) -C $(patsubst %_sort, %/, $@)
-clean:
-	$(MAKE) clear -C bubble
+
+clean: $(DIR)
+	for d in $(DIR); do\
+		$(MAKE) clear -C $$d;\
+	done

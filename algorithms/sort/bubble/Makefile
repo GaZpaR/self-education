@@ -1,11 +1,14 @@
 CC	:= clang++
 CF	:= -Wextra -std=c++14 #-I./ -L./ -lutil
+VPATH = ../
+INC = -I../
+OBJS = $(patsubst %.cpp, %.o, ifacesort.cpp)
 
-bubble: ifacesort.o bubble.cpp 
-	$(CC) $(CF) bubble.cpp ifacesort.o -o sort 
+bubble: $(OBJS) bubble.cpp 
+	$(CC) $(CF) $(INC) $^ -o sort 
 
-ifacesort.o: ifacesort.cpp
-	$(CC) $(CF) ifacesort.cpp -c 
+%.o: %.cpp
+	$(CC) $(CF) $^ -c 
 
 clear:
 	rm -f *.o

@@ -14,7 +14,6 @@ def runBenchmark(power, sortName):
         # Truncate 's', because last symbol is '\n'
         s = s[:len(s)-2]
         print "Spended for sort " + s + " ms"
-        #print "Spended for sort " + s[0: len(s)-2] + " ms"
         print "------------------------------------------"
 
 #Elementary sort
