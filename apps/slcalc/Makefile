@@ -1,9 +1,16 @@
 CC	:= g++
+TOOLCHAIN := arm-linux-gnueabihf-
 PT	:=
-FL	:= -Wextra -std=c++11
+CFL	:= -Wextra -std=c++11
+TPATH := /home/gazpar/toolchain/gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf/bin/
+LPATH := /home/gazpar/toolchain/sysroot-glibc-linaro-2.21-2016.05-arm-linux-gnueabihf/
+ARCH := -march=armv7-a -mcpu=cortex-a5 --sysroot=$(LPATH)
 
 all: slc.cpp
-	$(CC) $(FL) -o eval slc.cpp
+	$(CC) $(CFL) -o eval slc.cpp
+
+cross: slc.cpp
+	$(TPATH)$(TOOLCHAIN)$(CC) $(CFL) $(ARCH) slc.cpp -o acalc 
 
 clear:
 	rm -f *.o
