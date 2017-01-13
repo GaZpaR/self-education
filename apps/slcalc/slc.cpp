@@ -46,36 +46,36 @@ std::string evalExpWithoutBrackets(std::string exp){
 	const uint explen = exp.length();
 
 	// Allocating arguments and operations without ordering
-	for(uint i=0, ps = 0; i<explen; i++){
+	for(uint shift=0, position = 0; shift<explen; shift++){
 
 		// This check need for situation when we didn't allocate last argument
-		if(i == explen-1){
+		if(shift == explen-1){
 			std::string expWithoutBrackets;
-			expWithoutBrackets.assign(exp, ps, explen - ps + 1);
+			expWithoutBrackets.assign(exp, position, explen - position + 1);
 			operands.push_back((T) std::stod(expWithoutBrackets));
 		}
 
-		if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/'){
-			std::string expWithoutBrackets1;
-			expWithoutBrackets1.assign(exp, ps, i-ps);
-			operands.push_back((T) std::stod(expWithoutBrackets1));
+		if( exp[shift] == '+' || exp[shift] == '-' || exp[shift] == '*' || exp[shift] == '/'){
+			std::string expTemp;
+			expTemp.assign(exp, position, shift-position);
+			operands.push_back((T) std::stod(expTemp));
 
-			operations.push_back(exp[i]);
+			operations.push_back(exp[shift]);
 
-			std::string expWithoutBrackets2;
-			ps = i+1;
-			for(i++; i<explen; i++){
-					if( exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/' ){
-						expWithoutBrackets2.assign(exp, ps, i-ps);
-						operations.push_back(exp[i]);
+			std::string tempExp;
+			position = shift+1;
+			for(shift++; shift<explen; shift++){
+					if( exp[shift] == '+' || exp[shift] == '-' || exp[shift] == '*' || exp[shift] == '/' ){
+						tempExp.assign(exp, position, shift-position);
+						operations.push_back(exp[shift]);
 						break;
 					}
-					if(i == explen-1){
-						expWithoutBrackets2.assign(exp, ps, explen - ps);
+					if(shift == explen-1){
+						tempExp.assign(exp, position, explen - position);
 					}
 			}
-			operands.push_back((T)std::stod(expWithoutBrackets2));
-			ps = i+1;
+			operands.push_back((T)std::stod(tempExp));
+			position = shift+1;
 		}
 	}
 
